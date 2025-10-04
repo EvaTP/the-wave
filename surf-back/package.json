@@ -5,6 +5,10 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "build": "npx prisma generate && npx prisma migrate deploy",
+    "migrate": "npx prisma migrate dev --name init",
+    "studio": "npx prisma studio",
     "dev": "nodemon app.js",
     "seed:levels": "node prisma/seeds/seedLevels.js",
     "seed:spots": "node prisma/seeds/seedSpots.js",
