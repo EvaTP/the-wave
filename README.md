@@ -3,7 +3,7 @@
 Une plateforme communautaire connectant les surfeurs du monde entier autour de leur passion pour le surf.
 
 <p align="center">
-<img src="./the-wave.png" alt="visuel du site" width="400" height="400">
+<img src="./the-wave.png" alt="visuel du site" width="300" height="250">
 </p>
 
 ## 📋 Description
