@@ -1,0 +1,69 @@
+@import url("https://fonts.googleapis.com/css2?family=Lobster&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lexend+Giga:wght@100..900&display=swap");
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+:root {
+  /* --background: #ffffff; */
+  /* --background: azure; */
+  --background: linear-gradient(to bottom, #ccefff, #a7f3d0, #67e8f9);
+  --foreground: #171717;
+  --theme: #1f406e;
+  --lagoon: #00bfa6;
+  --bluesecondary: #0f3f8c;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-theme: var(--theme);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: "Montserrat", sans-serif;
+}
+
+h1 {
+  font-size: 4em;
+  font-weight: bold;
+  color: var(--theme);
+  font-family: "Lobster", "serif";
+}
+
+h2 {
+  font-size: 3em;
+  font-style: italic;
+  font-weight: bold;
+  text-align: center;
+  color: var(--theme);
+}
+h3 {
+  font-weight: 700;
+  font-size: xx-large;
+  color: var(--theme);
+  font-style: italic;
+  font-family: "Montserrat", sans-serif;
+}
+h4 {
+  font-weight: 700;
+  color: var(--bluesecondary);
+  text-align: center;
+  font-style: italic;
+  /* font-family: "Montserrat", sans-serif; */
+  font-family: "Lexend Giga", sans-serif;
+  /* font-stretch: extra-expanded; */
+  letter-spacing: 0.1em;
+  line-height: 1.25;
+}

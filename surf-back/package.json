@@ -1,0 +1,35 @@
+{
+  "name": "surf-back",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js",
+    "seed:levels": "node prisma/seeds/seedLevels.js",
+    "seed:spots": "node prisma/seeds/seedSpots.js",
+    "seed:roles": "node prisma/seeds/seedRoles.js",
+    "seed:users": "node prisma/seeds/seedUsers.js",
+    "seed:comments": "node prisma/seeds/seedComments.js",
+    "seed:hashtags": "node prisma/seeds/seedHashtags.js",
+    "seed:spotHashtags": "node prisma/seeds/seedSpotHashtags.js",
+    "seed:spotDeleteHashtags": "node prisma/seeds/seedSpotHashtagsDelete.js",
+    "seed:likes": "node prisma/seeds/seedLikes.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prisma/client": "^6.15.0",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10",
+    "prisma": "^6.15.0"
+  }
+}
