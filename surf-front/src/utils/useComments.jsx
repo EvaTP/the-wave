@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { API_BASE_URL } from "@/lib/api";
 
 const useComments = (spotId, isAuthenticated = true) => {
   const [comments, setComments] = useState([]);
@@ -15,9 +16,7 @@ const useComments = (spotId, isAuthenticated = true) => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(
-        `http://localhost:3001/spots/${spotId}/comments`
-      );
+      const response = await fetch(`${API_BASE_URL}/spots/${spotId}/comments`);
 
       if (!response.ok) {
         throw new Error(`Failed to fetch comments for spot ${spotId}`);

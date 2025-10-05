@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import SpotCard from "./SpotCard";
 import useLikedSpots from "../utils/useLikedSpots";
 import ButtonLink from "./ButtonLink";
+import { API_BASE_URL } from "@/lib/api";
 
 export default function LikedSpots({ user }) {
   const [likedSpotsDetails, setLikedSpotsDetails] = useState([]);
@@ -24,10 +25,7 @@ export default function LikedSpots({ user }) {
       setSpotsLoading(true);
       setSpotsError(null);
 
-      const response = await fetch(
-        `http://localhost:3001/likes/user/${user.id}`
-      );
-
+      const response = await fetch(`${API_BASE_URL}/likes/user/${user.id}`);
       if (!response.ok) {
         throw new Error(`Erreur ${response.status}: ${response.statusText}`);
       }

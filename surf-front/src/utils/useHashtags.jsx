@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { API_BASE_URL } from "@/lib/api";
 
 const useHashtags = (spotId, isAuthenticated = true) => {
   const [hashtags, setHashtags] = useState([]);
@@ -15,9 +16,7 @@ const useHashtags = (spotId, isAuthenticated = true) => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(
-        `http://localhost:3001/spots/${spotId}/hashtags`
-      );
+      const response = await fetch(`${API_BASE_URL}/spots/${spotId}/hashtags`);
 
       if (!response.ok) {
         throw new Error(`Failed to fetch hashtags for spot ${spotId}`);

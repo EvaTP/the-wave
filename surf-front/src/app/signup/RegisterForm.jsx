@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import ButtonSubmit from "../../components/ButtonSubmit";
 import Button from "../../components/Button";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import { API_BASE_URL } from "@/lib/api";
 
 const RegisterForm = () => {
   const initialFormData = {
@@ -36,7 +37,7 @@ const RegisterForm = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3001/users", {
+      const response = await fetch(`${API_BASE_URL}/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import SpotCard from "../../components/SpotCard";
-// import SpotsMap from "../../components/SpotsMap";
+import SpotCard from "../components/SpotCard";
+// import SpotsMap from "../components/SpotsMap";
 import dynamic from "next/dynamic";
 import { fetchSpots } from "@/lib/fetchSpots";
 

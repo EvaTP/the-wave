@@ -3,6 +3,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useAuth } from "./useAuth";
+import { API_BASE_URL } from "@/lib/api";
 
 export default function useLikedSpots() {
   const [likedSpots, setLikedSpots] = useState([]);
@@ -21,9 +22,7 @@ export default function useLikedSpots() {
 
       setLoading(true);
       try {
-        const response = await fetch(
-          `http://localhost:3001/likes/user/${user.id}`
-        );
+        const response = await fetch(`${API_BASE_URL}/likes/user/${user.id}`);
 
         if (!response.ok) {
           throw new Error(`Erreur ${response.status}: ${response.statusText}`);

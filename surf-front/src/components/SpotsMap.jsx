@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 // import spotsData from "../app/data/spots.json";
 import ButtonLink from "./ButtonLink";
 import { useAuth } from "../utils/useAuth";
+import { API_BASE_URL } from "@/lib/api";
 
 // Icône personnalisée pour les spots
 const spotMarker = new L.Icon({
@@ -34,7 +35,7 @@ export default function SpotsMap() {
   useEffect(() => {
     const fetchSpots = async () => {
       try {
-        const res = await fetch("http://localhost:3001/spots");
+        const res = await fetch(`${API_BASE_URL}/spots`);
         if (!res.ok) throw new Error("Erreur récupération spots");
         const data = await res.json();
         setSpots(data);
