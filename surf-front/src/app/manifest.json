@@ -19,13 +19,13 @@
   ],
   "screenshots": [
     {
-      "src": "/screenshots/the-wave-screenshot-wide.png",
+      "src": "/the-wave-screenshot-wide.png",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide"
     },
     {
-      "src": "/screenshots/the-wave-screenshot-narrow.png",
+      "src": "/the-wave-screenshot-narrow.png",
       "sizes": "512x512",
       "type": "image/png",
       "form_factor": "narrow"
