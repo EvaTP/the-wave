@@ -80,7 +80,7 @@ export function AuthProvider({ children }) {
     authService.logout();
     setUser(null);
     setIsAuthenticated(false);
-    router.push("/home"); // Rediriger vers la page d'accueil
+    router.push("/"); // Rediriger vers la page d'accueil
   };
 
   // ✅ Debug final
