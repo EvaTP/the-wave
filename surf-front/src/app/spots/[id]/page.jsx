@@ -93,10 +93,10 @@ export default function SpotPage({ params }) {
         </div>
       </section>
       <ButtonLink
-        href="/home"
+        href="/"
         className="text-xl font-bold px-6 py-3 rounded-2xl shadow-sm my-4 text-md bg-blue-900 text-white"
       >
-        🏄‍♂️ Return to Homepage
+        🏄‍♂️ To Homepage
       </ButtonLink>
     </main>
   );
