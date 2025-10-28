@@ -1,0 +1,38 @@
+export default function manifest() {
+  return {
+    name: "TheWave",
+    short_name: "TheWave",
+    start_url: "/",
+    icons: [
+      {
+        src: "/logo-the-wave-192.png",
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "maskable",
+      },
+      {
+        src: "/logo-the-wave-512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable",
+      },
+    ],
+    screenshots: [
+      {
+        src: "/screenshot-the-wave-wide.png",
+        sizes: "1280x720",
+        type: "image/png",
+        form_factor: "wide",
+      },
+      {
+        src: "/screenshot-the-wave-narrow.png",
+        sizes: "540x960",
+        type: "image/png",
+        form_factor: "narrow",
+      },
+    ],
+    theme_color: "#1f406e",
+    background_color: "#ffffff",
+    display: "standalone",
+  };
+}
