@@ -8,7 +8,7 @@ export default function FootLinks() {
     <div className="w-full bg-[#C2DFED] py-4">
       <div className="max-w-[960px] mx-auto flex justify-end gap-20 text-black font-normal mr-4">
         <div className="flex flex-col items-center">
-          <Link href="/home">Map</Link>
+          <Link href="/">Map</Link>
           <Image
             src="/map.svg"
             alt="map icon"

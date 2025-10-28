@@ -66,10 +66,10 @@ export default function About() {
         <br></br>
         {/* Bouton */}
         <ButtonLink
-          href="home"
+          href="/"
           className="my-4 text-md px-3 py-1 rounded bg-blue-900 text-white"
         >
-          🏄‍♂️ Back to Homepage
+          🏄‍♂️ To Homepage
         </ButtonLink>
       </div>
     </>

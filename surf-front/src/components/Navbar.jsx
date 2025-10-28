@@ -27,7 +27,7 @@ export default function Navbar() {
               priority
             />
             <div className="text-xl font-extrabold text-[#1f406e] tracking-tight">
-              <Link href="/home">The Wave</Link>
+              <Link href="/">The Wave</Link>
             </div>
           </div>
 

@@ -36,7 +36,7 @@ const LoginForm = () => {
       console.log("✅ Connexion réussie:", response.user);
 
       // Rediriger vers la page d'accueil après connexion
-      router.push("/home");
+      router.push("/");
     } catch (err) {
       console.error("❌ Erreur connexion:", err);
       setError(err.message || "Invalid username or password");
