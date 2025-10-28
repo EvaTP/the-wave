@@ -92,7 +92,7 @@ export default function LikedSpots({ user }) {
               </p>
 
               <ButtonLink
-                href="home"
+                href="/"
                 className="mt-4 mb-8 text-md px-3 py-1 rounded bg-blue-900 text-white"
               >
                 🔎 Discover spots
