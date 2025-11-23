@@ -17,6 +17,10 @@ async function main() {
         role: "user",
         role_description: "regular user with limited permissions",
       },
+      {
+        role: "demo",
+        role_description: "demo account with restricted access",
+      },
     ],
     skipDuplicates: true, // pratique si tu relances le seed
   });

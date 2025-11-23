@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
     "build": "npx prisma generate && npx prisma migrate deploy",
-    "migrate": "npx prisma migrate dev --name init",
+    "migrate": "npx prisma migrate dev",
     "studio": "npx prisma studio",
     "dev": "nodemon app.js",
     "seed:levels": "node prisma/seeds/seedLevels.js",
@@ -18,7 +18,8 @@
     "seed:hashtags": "node prisma/seeds/seedHashtags.js",
     "seed:spotHashtags": "node prisma/seeds/seedSpotHashtags.js",
     "seed:spotDeleteHashtags": "node prisma/seeds/seedSpotHashtagsDelete.js",
-    "seed:likes": "node prisma/seeds/seedLikes.js"
+    "seed:likes": "node prisma/seeds/seedLikes.js",
+    "seed:demo": "node prisma/seeds/seedDemoUser.js"
   },
   "keywords": [],
   "author": "",
