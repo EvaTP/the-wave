@@ -20,11 +20,11 @@ export default function About() {
         />
       </div>
 
-      <div className="min-h-screen flex flex-col py-2 px-4">
+      <div className="min-h-screen flex flex-col py-4 px-6">
         <h4 className="text-4xl text-center">
           Surfing is more than just a sport,<br></br>it's a way of life.
         </h4>
-        <p className="text-2xl mt-4 px-6 py-4">
+        <p className="text-2xl mt-4 px-10 py-4">
           Founded in 1991 by two passionate surfers, <strong>Johnny </strong>{" "}
           and <strong>Bodhi</strong>,{" "}
           <em>

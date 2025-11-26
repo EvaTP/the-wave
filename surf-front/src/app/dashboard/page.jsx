@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { useAuth } from "../../utils/useAuth";
 import LikedSpots from "../../components/LikedSpots";
+import DemoBanner from "../../components/DemoBanner";
 
 export default function Dashboard() {
   const { user, username, isAuthenticated, loading } = useAuth();
@@ -15,6 +16,7 @@ export default function Dashboard() {
         <h1 className="font-lobster text-2xl font-bold mt-8 mb-10">
           🏄‍♂️ My Dashboard
         </h1>
+        <DemoBanner />
       </div>
 
       {/* USER INFO */}

@@ -4,13 +4,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useAuth } from "../utils/useAuth";
+import { useIsDemo } from "@/utils/usePermissions";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const { user, isAuthenticated, handleLogin, handleLogout } = useAuth();
 
+  // Rôles
   const isAdmin =
     user?.role?.role === "admin" || user?.role?.role === "moderator";
+
+  const isDemo = useIsDemo();
+  const canSeeAdmin = isAdmin || isDemo;
 
   return (
     <nav className="bg-white/70 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50">
@@ -41,7 +46,6 @@ export default function Navbar() {
 
           {/* Liens desktop */}
           <div className="hidden md:flex space-x-6 text-gray-700 font-medium ml-auto">
-            {/* condition ternaire */}
             {!isAuthenticated ? (
               <>
                 <Link href="/login" className="flex items-center space-x-2">
@@ -53,6 +57,7 @@ export default function Navbar() {
                   />
                   <span>Log in</span>
                 </Link>
+
                 <Link href="/signup" className="flex items-center space-x-2">
                   <Image
                     src="/user-round-plus.svg"
@@ -65,8 +70,8 @@ export default function Navbar() {
               </>
             ) : (
               <>
-                {/* ✅ Lien Admin visible seulement si admin ou moderator */}
-                {isAdmin && (
+                {/* Lien Admin si admin, moderator ou demo */}
+                {canSeeAdmin && (
                   <>
                     <Link href="/admin" className="flex items-center space-x-2">
                       <Image
@@ -77,13 +82,14 @@ export default function Navbar() {
                       />
                       <span>Admin</span>
                     </Link>
+
                     <Link
                       href="/dashboard"
                       className="flex items-center space-x-2"
                     >
                       <Image
                         src="/circle-user-round.svg"
-                        alt="acccount icon"
+                        alt="account icon"
                         width={20}
                         height={20}
                       />
@@ -92,18 +98,37 @@ export default function Navbar() {
                   </>
                 )}
 
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center space-x-2"
-                >
-                  <Image
-                    src="/log-out.svg"
-                    alt="logout icon"
-                    width={20}
-                    height={20}
-                  />
-                  <span>Log out</span>
-                </button>
+                {/* Lien visible seulement en mode demo */}
+                {isDemo && !isAdmin && (
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center space-x-2"
+                  >
+                    <Image
+                      src="/log-out.svg"
+                      alt="logout icon"
+                      width={20}
+                      height={20}
+                    />
+                    <span>Log out</span>
+                  </button>
+                )}
+
+                {/* Logout normal */}
+                {!isDemo && (
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center space-x-2"
+                  >
+                    <Image
+                      src="/log-out.svg"
+                      alt="logout icon"
+                      width={20}
+                      height={20}
+                    />
+                    <span>Log out</span>
+                  </button>
+                )}
               </>
             )}
           </div>
@@ -123,6 +148,7 @@ export default function Navbar() {
                   />
                   <span>Login</span>
                 </Link>
+
                 <Link href="/signup" className="flex justify-end space-x-2">
                   <Image
                     src="/user-round-plus.svg"
@@ -135,8 +161,8 @@ export default function Navbar() {
               </>
             ) : (
               <>
-                {/* ✅ Lien Admin visible seulement si admin ou moderator */}
-                {isAdmin && (
+                {/* Lien Admin visible pour admin, moderator et demo */}
+                {canSeeAdmin && (
                   <>
                     <Link href="/admin" className="flex items-center space-x-2">
                       <Image
@@ -147,13 +173,14 @@ export default function Navbar() {
                       />
                       <span>Admin</span>
                     </Link>
+
                     <Link
                       href="/dashboard"
                       className="flex items-center space-x-2"
                     >
                       <Image
                         src="/circle-user-round.svg"
-                        alt="acccount icon"
+                        alt="account icon"
                         width={20}
                         height={20}
                       />

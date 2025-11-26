@@ -6,6 +6,7 @@ import SpotCard from "../components/SpotCard";
 // import SpotsMap from "../components/SpotsMap";
 import dynamic from "next/dynamic";
 import { fetchSpots } from "@/lib/fetchSpots";
+import DemoBanner from "@/components/DemoBanner";
 
 // import différé client-only de SpotsMap
 const SpotsMap = dynamic(() => import("@/components/SpotsMap"), {
@@ -70,6 +71,7 @@ export default function Home() {
           <h1 className="font-lobster text-6xl md:text-8xl text-white drop-shadow-lg mt-4">
             🏄‍♂️ Worldwide Surf Spots
           </h1>
+          <DemoBanner />
         </div>
 
         <p className="font-lobster text-4xl  text-sky-800 text-center font-bold italic">
@@ -89,7 +91,7 @@ export default function Home() {
 
         {/* Liste des spots */}
         <div className="grid grid-cols-1 gap-6 mt-6sm:grid-cols-2 lg:grid-cols-3">
-          {loading && <p>Chargement des spots...</p>}
+          {loading && <p className="text-xl mt-5">Chargement des spots...</p>}
           {error && <p className="text-red-500">{error}</p>}
           {!loading &&
             !error &&

@@ -3,6 +3,8 @@ import { prisma } from "./../lib/prisma.js";
 
 const router = Router();
 
+// IMPORTANT : Les routes spécifiques AVANT les routes avec paramètres dynamiques
+
 // GET all spots
 router.get("/", async (req, res) => {
   console.log("route spots get appelée");
@@ -26,6 +28,55 @@ router.get("/", async (req, res) => {
     res
       .status(500)
       .json({ error: "Erreur serveur lors de la récupération des spots." });
+  }
+});
+
+// --------------------------
+// ROUTE LÉGÈRE POUR LA MAP
+// --------------------------
+// GET /spots/map → version légère optimisée pour la carte
+router.get("/map", async (req, res) => {
+  console.log("Route /spots/map appelée");
+  try {
+    // Récupérer uniquement les champs nécessaires pour la carte
+    const spots = await prisma.spot.findMany({
+      select: {
+        id: true,
+        name: true,
+        country_spot: true,
+        lat: true,
+        lng: true,
+        spot_levels: {
+          select: {
+            level: {
+              select: {
+                label: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    // formatter les données
+    const formatted = spots.map((spot) => ({
+      id: spot.id,
+      name: spot.name,
+      country_spot: spot.country_spot,
+      lat: spot.lat ? parseFloat(spot.lat) : null, // Convertir Decimal en Number
+      lng: spot.lng ? parseFloat(spot.lng) : null,
+      // Si spot_levels est vide, renvoyer chaîne vide pour level
+      level: spot.spot_levels?.length
+        ? spot.spot_levels.map((sl) => sl.level.label).join(", ")
+        : "",
+    }));
+    console.log(`✅ ${formatted.length} spots récupérés pour la carte`);
+    res.json(formatted);
+  } catch (error) {
+    console.error("Erreur Prisma /spots/map :", error);
+    res.status(500).json({
+      error: "Erreur serveur lors de la récupération des spots (map).",
+    });
   }
 });
 
@@ -53,7 +104,25 @@ router.get("/:id/hashtags", async (req, res) => {
   }
 });
 
-// GET SPOTS BY ID
+// GET COMMENTS FOR A SPOT BY SPOT ID (http://localhost:3001/spots/15/comments)
+router.get("/:id/comments", async (req, res) => {
+  try {
+    const comments = await prisma.comment.findMany({
+      where: { spot_id: parseInt(req.params.id) },
+      include: {
+        user: true,
+      },
+    });
+    res.json(comments);
+  } catch (error) {
+    console.error("Erreur Prisma :", error);
+    res.status(500).json({
+      error: "Erreur serveur lors de la récupération des commentaires.",
+    });
+  }
+});
+
+// GET SPOTS BY ID (toujours en dernier après les GET spécifiques).(http://localhost:3001/spots/15)
 router.get("/:id", async (req, res) => {
   console.log("route spots get appelée");
   console.log("origin : ", req.headers.origin);
@@ -75,25 +144,7 @@ router.get("/:id", async (req, res) => {
     console.error("Erreur Prisma :", error);
     res
       .status(500)
-      .json({ error: "Erreur serveur lors de la récupération des spots." });
-  }
-});
-
-// GET COMMENTS FOR A SPOT BY SPOT ID
-router.get("/:id/comments", async (req, res) => {
-  try {
-    const comments = await prisma.comment.findMany({
-      where: { spot_id: parseInt(req.params.id) },
-      include: {
-        user: true,
-      },
-    });
-    res.json(comments);
-  } catch (error) {
-    console.error("Erreur Prisma :", error);
-    res.status(500).json({
-      error: "Erreur serveur lors de la récupération des commentaires.",
-    });
+      .json({ error: "Erreur serveur lors de la récupération du spot/id." });
   }
 });
 

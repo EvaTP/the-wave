@@ -35,12 +35,23 @@ export default function SpotsMap() {
   useEffect(() => {
     const fetchSpots = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/spots`);
-        if (!res.ok) throw new Error("Erreur récupération spots");
+        // console.log("🗺️ Fetching spots from:", `${API_BASE_URL}/spots/map`);
+        // const res = await fetch(`${API_BASE_URL}/spots/map`);
+        // const url = `http://localhost:3001/spots/map`;  ⭐  TEST : Forcer local
+        const url = `${API_BASE_URL}/spots`;
+        console.log("😆 Fetching spots from /spots:", url);
+
+        // ⭐ CORRECTION : Parenthèses correctes
+        const res = await fetch(url);
+        console.log("📡 Response status:", res.status);
+        console.log("🏞️", spots);
+
+        if (!res.ok) throw new Error("Erreur récupération spots (map)");
         const data = await res.json();
+        console.log(` ✅ ✅ ${data.length} spots reçus pour la carte`);
         setSpots(data);
       } catch (err) {
-        console.error(err);
+        console.error("Erreur SpotsMap fetch:", err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -49,14 +60,26 @@ export default function SpotsMap() {
     fetchSpots();
   }, []);
 
-  if (loading) return <p>Chargement des spots...</p>;
-  if (error) return <p className="text-red-500">Erreur: {error}</p>;
+  if (loading) return <p className="text-xl mt-5">Chargement de la carte...</p>;
+  if (error)
+    return <p className="text-red-500 text-xl mt-5">Erreur: {error}</p>;
+
+  // On ne rend MapContainer que si spots sont disponibles
+  if (!Array.isArray(spots) || spots.length === 0) {
+    return (
+      <div className="w-full h-[400px] flex items-center justify-center bg-gray-800 rounded-lg">
+        <p className="text-xl text-white">Aucun spot disponible</p>
+      </div>
+    );
+  }
+  console.log("📌 Spots utilisés pour affichage :", spots.length);
 
   return (
     <div className="w-full h-[400px] rounded-lg shadow-lg overflow-hidden">
       <MapContainer
+        key={spots.length} // évite "Map container is being reused"
         center={[20, 0]} // Océan Atlantique pour un affichage global
-        zoom={1}
+        zoom={2}
         className="w-full h-full"
       >
         {/* Fond OpenStreetMap */}
@@ -74,20 +97,19 @@ export default function SpotsMap() {
               icon={spotMarker}
             >
               <Popup>
-                <strong>{spot.name}</strong>
-                <br />
-                {spot.country_spot}
-                <br />
-                Level:{" "}
-                {spot.spot_levels?.map((sl) => sl.level.label).join(", ")}
-                {isAuthenticated && (
-                  <ButtonLink href={`/spots/${spot.id}`} className="mt-2">
-                    GO
-                  </ButtonLink>
-                )}
-                {/* <ButtonLink href={`/spots/${spot.id}`} className="mt-2">
-                  GO
-                </ButtonLink> */}
+                <div className="p-2">
+                  <strong>{spot.name}</strong>
+                  <br />
+                  {spot.country_spot}
+                  <br />
+                  Level: {spot.level}
+                  {spot.spot_levels?.map((sl) => sl.level.label).join(", ")}
+                  {isAuthenticated && (
+                    <ButtonLink href={`/spots/${spot.id}`} className="mt-2">
+                      GO
+                    </ButtonLink>
+                  )}
+                </div>
               </Popup>
             </Marker>
           ))}

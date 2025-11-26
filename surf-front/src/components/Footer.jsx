@@ -15,7 +15,7 @@ export default function Footer() {
               src="/logo-the-wave-white-bg-192.png"
               alt="The Wave logo"
               fill
-              sizes="20px"
+              sizes="30px"
               className="object-contain"
               priority
             />
@@ -24,17 +24,17 @@ export default function Footer() {
           {/* Liens */}
           <Link
             href="/about"
-            className="hover:text-white transition-colors duration-200"
+            className="hover:text-white transition-colors duration-200 text-lg"
           >
             About
           </Link>
 
-          <Link
+          {/* <Link
             href="#"
             className="hover:text-white transition-colors duration-200"
           >
             Contact
-          </Link>
+          </Link> */}
 
           {/* Réseaux sociaux */}
           <div className="flex gap-4 items-center">
@@ -43,7 +43,7 @@ export default function Footer() {
                 src="/instagram.svg"
                 alt="Instagram logo"
                 fill
-                sizes="15px"
+                sizes="20px"
                 className="object-contain hover:opacity-80 transition-opacity cursor-pointer"
                 priority
               />
@@ -54,7 +54,7 @@ export default function Footer() {
                 src="/facebook.svg"
                 alt="Facebook logo"
                 fill
-                sizes="15px"
+                sizes="20px"
                 className="object-contain hover:opacity-80 transition-opacity cursor-pointer"
                 priority
               />
@@ -70,66 +70,3 @@ export default function Footer() {
     </footer>
   );
 }
-
-// export default function Footer() {
-//   return (
-//     <footer
-//       style={{
-//         backgroundColor: "#1f406e", // color theme
-//         borderTop: "1px solid #C2DFED", // bleu gris
-
-//         padding: "1.5rem 1rem",
-//         textAlign: "center",
-//         fontSize: "0.875rem",
-//         color: "FFFFF", // blanc
-//       }}
-//     >
-//       <div
-//         style={{
-//           maxWidth: "960px",
-//           margin: "0 auto",
-//         }}
-//       >
-//         <div
-//           style={{
-//             display: "flex",
-//             justifyContent: "center",
-//             gap: "2rem",
-//             marginBottom: "0.5rem",
-//             color: "#C2DFED",
-//             fontWeight: "600",
-//           }}
-//         >
-//           <Image
-//             //className="dark:invert"
-//             src="/logo-the-wave-white-bg-192.png"
-//             alt="The Wave logo"
-//             width={20}
-//             height={20}
-//             priority
-//           />
-//           <Link href="about">About</Link>
-//           <Link href="#">Contact</Link>
-//           <Image
-//             src="/instagram.svg"
-//             alt="Instagram logo"
-//             width={15}
-//             height={15}
-//             priority
-//           />
-//           <Image
-//             //className="dark:invert"
-//             src="/facebook.svg"
-//             alt="Facebook logo"
-//             width={15}
-//             height={15}
-//             priority
-//           />
-//         </div>
-//         <p style={{ color: "#C2DFED", fontSize: "1 rem" }}>
-//           © {new Date().getFullYear()} | The Wave
-//         </p>
-//       </div>
-//     </footer>
-//   );
-// }

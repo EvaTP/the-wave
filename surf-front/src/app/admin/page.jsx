@@ -5,6 +5,7 @@ import { fetchUsers } from "../../lib/fetchUsers";
 import { useEffect, useState } from "react";
 import UserCard from "../../components/UserCard";
 import { useRouter } from "next/navigation";
+import DemoBanner from "@/components/DemoBanner";
 
 export default function AdminDashboard() {
   const { user, username } = useAuth();
@@ -14,10 +15,10 @@ export default function AdminDashboard() {
   const [error, setError] = useState(null);
   const [isReady, setIsReady] = useState(false);
 
-  // rediriger si pas admin ou modérateur
+  // rediriger si pas admin, modérateur ou demo
   useEffect(() => {
     if (user && user.role?.role) {
-      if (!["admin", "moderator"].includes(user.role.role)) {
+      if (!["admin", "moderator", "demo"].includes(user.role.role)) {
         router.push("/dashboard"); // redirection vers dashboard classique
       }
     }
@@ -51,14 +52,30 @@ export default function AdminDashboard() {
     <div className="p-8 text-center">
       <div className="flex text-center">
         <h1 className="font-lobster text-2xl text-center font-bold mt-8 mb-10">
-          🏄‍♀️ 🏄‍♂️ Welcome to Admin Dashboard
+          🏄‍♀️ 🏄‍♂️ Welcome to the Admin Dashboard
         </h1>
+        <DemoBanner />
       </div>
 
       {/* USER INFO */}
       <div className="flex flex-col px-10">
         <div className="flex items-center gap-4 mb-6">
           <div className="flex items-center gap-6 p-4">
+            {/* USER PICTURE */}
+            <div className="w-[100px] h-[140px] relative">
+              <Image
+                className="rounded-[50%] object-cover border-2 border-cyan-700"
+                src={user?.url_userpicture || "/thewave.png"}
+                alt="User Picture"
+                fill
+                sizes="100px"
+                // width={100}
+                // height={140}
+                priority
+              />
+            </div>
+
+            <div className="min-h-[3rem] flex items-center"></div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold italic">
               Hello {user?.firstname ? `${user.firstname}!` : ""}
             </h2>
