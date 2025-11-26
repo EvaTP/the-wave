@@ -15,6 +15,7 @@ The Wave est une application web permettant aux passionnés de surf de découvri
 - 🗺️ Carte interactive des spots de surf dans le monde
 - 👥 Système d'authentification sécurisé
 - 🔐 Gestion des profils utilisateurs
+- 🕶️ Profil "demo" pour se connecter en lecture seule
 - 👔 Panel d'administration pour les utilisateurs admin
 - 🌍 Exploration des spots par localisation
 
@@ -97,7 +98,7 @@ npm run dev
 ```
 the-wave/
 ├── surf-back/          # API Express.js
-│   ├── prisma/         # Schéma et migrations
+│   ├── prisma/         # Schéma, seeds et migrations
 │   └── src/            # Code source du backend
 └── surf-front/         # Application Next.js
     ├── src/
@@ -113,7 +114,7 @@ Le système d'authentification permet :
 - Inscription de nouveaux utilisateurs
 - Connexion sécurisée avec JWT
 - Vérification des mots de passe avec bcrypt
-- Accès au panel admin pour les utilisateurs autorisés
+- Accès au panel admin pour les utilisateurs autorisés (admin et mode "demo")
 
 ## 🚧 Statut du projet
 
