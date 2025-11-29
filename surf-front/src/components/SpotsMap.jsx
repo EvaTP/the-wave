@@ -29,10 +29,10 @@ L.Icon.Default.mergeOptions({
 function SurfboardLoader() {
   return (
     <div className="absolute inset-0 z-[1000] flex flex-col items-center justify-center pointer-events-none">
-      <div className="animate-spin-slow">
-        <div className="text-9xl">🏄‍♂️</div>
+      <div className="animate-spin-slow mt-8">
+        <div className="text-9xl mt-16">🏄‍♂️</div>
       </div>
-      <p className="text-white mt-6 text-3xl font-bold animate-pulse drop-shadow-lg">
+      <p className="text-sky-800 mt-8 text-6xl font-bold animate-pulse drop-shadow-lg">
         Chargement des spots...
       </p>
     </div>

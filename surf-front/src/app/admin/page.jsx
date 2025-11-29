@@ -8,22 +8,29 @@ import { useRouter } from "next/navigation";
 import DemoBanner from "@/components/DemoBanner";
 
 export default function AdminDashboard() {
-  const { user, username } = useAuth();
+  const { user, username, loading } = useAuth();
   const router = useRouter();
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [usersLoading, setUsersLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isReady, setIsReady] = useState(false);
 
-  // rediriger si pas admin, modérateur ou demo
+  // rediriger vers la page "login" si pas connecté
   useEffect(() => {
+    if (loading) return; // Ne rien faire tant que useAuth n’a pas fini
+
+    // Si PAS CONNECTÉ, redirection vers /login
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+    // rediriger vers la page "dashboard" si connecté mais pas admin, modérateur ou demo
     if (user && user.role?.role) {
       if (!["admin", "moderator", "demo"].includes(user.role.role)) {
-        router.push("/dashboard"); // redirection vers dashboard classique
+        router.push("/dashboard");
       }
     }
-  }, [user, router]);
-
+  }, [loading, user, router]);
   // récupérer les users depuis le back-end
   useEffect(() => {
     const loadUsers = async () => {
@@ -34,7 +41,7 @@ export default function AdminDashboard() {
         console.error(error);
         setError("Erreur lors du chargement des utilisateurs");
       } finally {
-        setLoading(false);
+        setUsersLoading(false);
       }
     };
     loadUsers();
@@ -84,11 +91,11 @@ export default function AdminDashboard() {
       </div>
 
       {/* État de chargement / erreur */}
-      {loading && <p>Chargement des utilisateurs...</p>}
+      {usersLoading && <p>Chargement des utilisateurs...</p>}
       {error && <p className="text-red-500">{error}</p>}
 
       {/* Sections affichées uniquement si pas d'erreur et pas de chargement */}
-      {!loading && !error && (
+      {!usersLoading && !error && (
         <div className="flex flex-col md:flex-col gap-12 items-center">
           {/* Section Admins & Modérateurs */}
           <section className="flex-1">

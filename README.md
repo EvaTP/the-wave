@@ -16,7 +16,7 @@ The Wave est une application web permettant aux passionnés de surf de découvri
 - 👥 Système d'authentification sécurisé
 - 🔐 Gestion des profils utilisateurs
 - 🕶️ Profil "demo" pour se connecter en lecture seule
-- 👔 Panel d'administration pour les utilisateurs admin
+- 👔 Panel d'administration pour les utilisateurs admin (visible en mode "demo" en lecture seule)
 - 🌍 Exploration des spots par localisation
 
 ## 🚀 Technologies utilisées

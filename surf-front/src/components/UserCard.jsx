@@ -11,6 +11,11 @@ const UserCard = ({
   url_userpicture,
   role_id,
   role,
+
+  // callbacks à définir dans la page admin
+  onEdit,
+  onDelete,
+  onSave,
 }) => {
   const [imageError, setImageError] = useState(false);
   const [imageLoading, setImageLoading] = useState(true);
@@ -29,6 +34,31 @@ const UserCard = ({
 
   return (
     <article className="text-left bg-white shadow-md rounded-lg p-4 max-w-xl w-full mx-auto mb-6 border border-gray-200">
+      {/* Icons actions */}
+      <div className="absolute top-3 right-3 flex gap-3">
+        {/* Edit */}
+        <img
+          src="/pencil.svg"
+          alt="Modifier"
+          className="w-6 h-6 cursor-pointer hover:opacity-70 transition"
+          onClick={() => onEdit && onEdit(id)}
+        />
+        {/* Save */}
+        <img
+          src="/save.svg"
+          alt="Enregistrer"
+          className="w-6 h-6 cursor-pointer hover:opacity-70 transition"
+          onClick={() => onSave && onSave(id)}
+        />
+        {/* Delete */}
+        <img
+          src="/trash-red.svg"
+          alt="Supprimer"
+          className="w-6 h-6 cursor-pointer hover:opacity-70 transition"
+          onClick={() => onDelete && onDelete(id)}
+        />
+      </div>
+
       {/* User picture */}
       <div className="relative w-full h-56 mb-4 bg-gray-100 rounded-md overflow-hidden">
         {imageLoading && !imageError && (
