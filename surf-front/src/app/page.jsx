@@ -65,7 +65,8 @@ export default function Home() {
             src="/thewave.png"
             alt="The Wave logo"
             width={250}
-            height={200}
+            height={250}
+            style={{ height: "auto" }}
             priority
           />
           <h1 className="font-lobster text-6xl md:text-8xl text-white drop-shadow-lg mt-4">

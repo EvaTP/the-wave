@@ -34,9 +34,9 @@ router.get("/", async (req, res) => {
 // --------------------------
 // ROUTE LÉGÈRE POUR LA MAP
 // --------------------------
-// GET /spots/map → version légère optimisée pour la carte
+// GET /spots/map → version légère optimisée pour la carte. Doit être avant le GET /spots/:id
 router.get("/map", async (req, res) => {
-  console.log("Route /spots/map appelée");
+  console.log("🌴 Route /spots/map appelée");
   try {
     // Récupérer uniquement les champs nécessaires pour la carte
     const spots = await prisma.spot.findMany({
@@ -58,7 +58,7 @@ router.get("/map", async (req, res) => {
       },
     });
 
-    // formatter les données
+    // formatter les données (gestion des Decimal de Prisma)
     const formatted = spots.map((spot) => ({
       id: spot.id,
       name: spot.name,
@@ -74,8 +74,11 @@ router.get("/map", async (req, res) => {
     res.json(formatted);
   } catch (error) {
     console.error("Erreur Prisma /spots/map :", error);
+    console.error("Stack trace:", error.stack); // ⭐ Log détaillé
     res.status(500).json({
       error: "Erreur serveur lors de la récupération des spots (map).",
+      details:
+        process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 });
