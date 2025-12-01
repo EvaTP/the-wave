@@ -28,11 +28,13 @@ L.Icon.Default.mergeOptions({
 // 🏄‍♂️ Composant Loader avec icône surfeur qui tourne
 function SurfboardLoader() {
   return (
+    // <div className="absolute top-[60px] left-0 right-0 bottom-0 z-[1000] flex flex-col items-center justify-center pointer-events-none">
     <div className="absolute inset-0 z-[1000] flex flex-col items-center justify-center pointer-events-none">
       <div className="animate-spin-slow mt-8">
-        <div className="text-9xl mt-16">🏄‍♂️</div>
+        <div className="text-9xl">🏄‍♂️🏄‍♀️</div>
       </div>
-      <p className="text-sky-800 mt-8 text-6xl font-bold animate-pulse drop-shadow-lg">
+      {/* <p className="text-sky-800 mt-8 text-6xl font-bold animate-pulse drop-shadow-lg"> */}
+      <p className="text-sky-800 mt-4 text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold animate-pulse drop-shadow-lg text-center">
         Chargement des spots...
       </p>
     </div>
@@ -100,21 +102,6 @@ export default function SpotsMap() {
     fetchSpots();
   }, []); // ⭐ Dépendances vides + useRef = fetch une seule fois
 
-  // ancien code de fetch (avant optimisation avec useRef)
-  //       if (!res.ok)
-  //         throw new Error("Erreur récupération spots (map)");
-  //       const data = await res.json();
-  //       setSpots(data);
-  //     } catch (err) {
-  //       console.error("Erreur SpotsMap fetch:", err);
-  //       setError(err.message);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //   fetchSpots();
-  // }, []);
-
   // Affichage d'erreur (carte + message d'erreur)
   if (error) {
     return (
@@ -142,19 +129,10 @@ export default function SpotsMap() {
   // if (error)
   //   return <p className="text-red-500 text-xl mt-5">Erreur: {error}</p>;
 
-  // ENLEVE : On ne rend MapContainer que si spots sont disponibles
-  // if (!Array.isArray(spots) || spots.length === 0) {
-  //   return (
-  //     <div className="w-full h-[400px] flex items-center justify-center bg-gray-800 rounded-lg">
-  //       <p className="text-xl text-white">Aucun spot disponible</p>
-  //     </div>
-  //   );
-  // }
-
   console.log("📌 Spots utilisés pour affichage :", spots.length);
 
   return (
-    <div className="w-full h-[400px] rounded-lg shadow-lg overflow-hidden">
+    <div className="w-full h-[400px] rounded-lg shadow-lg overflow-hidden relative">
       {/* 1. Carte affichée IMMÉDIATEMENT avant spots chargés */}
       <MapContainer
         key={`map-${spots.length}`} // Évite "Map container is being reused"
@@ -199,41 +177,6 @@ export default function SpotsMap() {
             </Popup>
           </Marker>
         ))}
-
-        {/* ANCIEN CODE : Affichage des markers uniquement si spots est un tableau */}
-        {/* {Array.isArray(spots) &&
-            spots.map((spot) => (
-              <Marker
-                key={spot.id}
-                position={[parseFloat(spot.lat), parseFloat(spot.lng)]}
-                // position={[spot.lat, spot.lng]}
-                icon={spotMarker}
-              >
-                <Popup>
-                  <div className="p-2">
-                    <strong>{spot.name}</strong>
-                    <br />
-                    {spot.country_spot}
-                    <br />
-
-                    {/* ⭐ Avec /spots/map, spot.level est déjà formaté */}
-        {/* {spot.level && (
-                      <>
-                        <span className="text-xs">Level: {spot.level}</span>
-                        <br />
-                      </>
-                    )} */}
-
-        {/* Level: {spot.level}
-                    {spot.spot_levels?.map((sl) => sl.level.label).join(", ")} */}
-        {/* {isAuthenticated && (
-                      <ButtonLink href={`/spots/${spot.id}`} className="mt-2">
-                        GO
-                      </ButtonLink>
-                    )}
-                  </div>
-                </Popup>
-              </Marker> */}
       </MapContainer>
 
       {/* ⭐ Loader par-dessus la carte pendant le chargement */}
