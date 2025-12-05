@@ -1,4 +1,4 @@
-import RegisterForm from "./RegisterForm";
+import UserForm from "@/components/UserForm";
 
 export default function SignupPage() {
   return (
@@ -10,7 +10,7 @@ export default function SignupPage() {
       </div>
 
       <div className="min-h-screen flex justify-center items-center">
-        <RegisterForm />
+        <UserForm />
       </div>
     </>
   );

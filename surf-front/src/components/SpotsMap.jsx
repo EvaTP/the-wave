@@ -124,11 +124,6 @@ export default function SpotsMap() {
     );
   }
 
-  //ancien code
-  // if (loading) return <p className="text-xl mt-5">Chargement de la carte...</p>;
-  // if (error)
-  //   return <p className="text-red-500 text-xl mt-5">Erreur: {error}</p>;
-
   console.log("📌 Spots utilisés pour affichage :", spots.length);
 
   return (

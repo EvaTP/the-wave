@@ -2,9 +2,10 @@
 import Image from "next/image";
 import { useAuth } from "../../utils/useAuth";
 import { fetchUsers } from "../../lib/fetchUsers";
-import { useEffect, useState } from "react";
-import UserCard from "../../components/UserCard";
+import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import UserCard from "@/components/UserCard";
+import UserForm from "@/components/UserForm";
 import DemoBanner from "@/components/DemoBanner";
 
 export default function AdminDashboard() {
@@ -14,6 +15,10 @@ export default function AdminDashboard() {
   const [usersLoading, setUsersLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isReady, setIsReady] = useState(false);
+  const formRef = useRef(null);
+
+  // 👉 NEW : état pour l’édition
+  const [editingUser, setEditingUser] = useState(null);
 
   // rediriger vers la page "login" si pas connecté
   useEffect(() => {
@@ -31,6 +36,7 @@ export default function AdminDashboard() {
       }
     }
   }, [loading, user, router]);
+
   // récupérer les users depuis le back-end
   useEffect(() => {
     const loadUsers = async () => {
@@ -47,6 +53,13 @@ export default function AdminDashboard() {
     loadUsers();
   }, []);
 
+  // NEW : effet pour scroller vers le formulaire quand editingUser change
+  useEffect(() => {
+    if (editingUser && formRef.current) {
+      formRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [editingUser]);
+
   // ✅ Effet pour marquer le composant comme prêt après l'hydratation
   useEffect(() => {
     setIsReady(true);
@@ -54,6 +67,71 @@ export default function AdminDashboard() {
 
   // 🔴 évite un rendu prématuré (corrige les erreurs d'hydratation Next.js)
   if (!isReady) return null;
+
+  // 👉 NEW : supprimer un user
+  const handleDelete = async (userId) => {
+    if (!confirm("Supprimer cet utilisateur ?")) return;
+
+    try {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`,
+        { method: "DELETE" }
+      );
+
+      if (!res.ok) {
+        alert("Erreur lors de la suppression");
+        return;
+      }
+      // Mettre à jour la liste des users dans l'état local
+      setUsers((prev) => prev.filter((u) => u.id !== userId));
+    } catch (err) {
+      console.error(err);
+      alert("Erreur, impossible de supprimer l'utilisateur");
+    }
+  };
+
+  // 👉 NEW : activer le mode édition
+  const handleEdit = (user) => {
+    setEditingUser(user);
+  };
+
+  // 👉 NEW : Callback après succès dans UserForm
+  const handleFormSuccess = async (updatedUser) => {
+    try {
+      // Récupérer le user complet depuis l'API (avec role)
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/users/${updatedUser.id}`
+      );
+      if (!res.ok) throw new Error("Impossible de récupérer le user");
+
+      const fullUser = await res.json();
+
+      // Mettre à jour la liste locale
+      setUsers((prev) =>
+        prev.map((u) => (u.id === fullUser.id ? fullUser : u))
+      );
+    } catch (err) {
+      console.error(err);
+      alert("Erreur lors de la mise à jour de l'utilisateur");
+    } finally {
+      setEditingUser(null); // fermer le formulaire
+    }
+  };
+  // 👉 OLD : Callback après succès dans UserForm
+  // const handleFormSuccess = (updatedUser) => {
+  //   setUsers((prev) =>
+  //     prev.map((u) => (u.id === updatedUser.id ? updatedUser : u))
+  //   );
+  //   setEditingUser(null); // fermer le formulaire
+  // };
+
+  // if (!isReady) return null;
+
+  // 👉 NEW : callback quand UserForm a fini une édition
+  // const handleFormSuccess = () => {
+  //   setEditingUser(null);
+  //   loadUsers();
+  // };
 
   return (
     <div className="p-8 text-center">
@@ -94,7 +172,7 @@ export default function AdminDashboard() {
       {usersLoading && <p>Chargement des utilisateurs...</p>}
       {error && <p className="text-red-500">{error}</p>}
 
-      {/* Sections affichées uniquement si pas d'erreur et pas de chargement */}
+      {/* DISPLAY USERS : sections affichées uniquement si pas d'erreur et pas de chargement */}
       {!usersLoading && !error && (
         <div className="flex flex-col md:flex-col gap-12 items-center">
           {/* Section Admins & Modérateurs */}
@@ -106,7 +184,12 @@ export default function AdminDashboard() {
                   ["admin", "moderator"].includes(user.role?.role)
                 )
                 .map((user) => (
-                  <UserCard key={user.id} {...user} />
+                  <UserCard
+                    key={user.id}
+                    {...user}
+                    onEdit={() => setEditingUser(user)}
+                    onDelete={() => handleDelete(user.id)}
+                  />
                 ))}
             </div>
           </section>
@@ -118,10 +201,31 @@ export default function AdminDashboard() {
               {users
                 .filter((user) => user.role?.role === "user")
                 .map((user) => (
-                  <UserCard key={user.id} {...user} />
+                  <UserCard
+                    key={user.id}
+                    {...user}
+                    // nouveau pour page admin avec callbacks :
+                    onEdit={() => handleEdit(user)}
+                    onDelete={() => handleDelete(user.id)}
+                  />
                 ))}
             </div>
           </section>
+
+          {/* 👉 NEW : Zone formulaire (édition uniquement) */}
+          {editingUser && (
+            <div className="max-w-xl mx-auto my-10">
+              <h2 className="text-xl font-semibold mb-4">
+                Modifier {editingUser.firstname}
+              </h2>
+              <UserForm
+                mode="edit"
+                initialData={editingUser}
+                onSuccess={handleFormSuccess}
+                onCancel={() => setEditingUser(null)}
+              />
+            </div>
+          )}
         </div>
       )}
     </div>

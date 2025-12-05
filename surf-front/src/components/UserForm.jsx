@@ -1,13 +1,28 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import ButtonSubmit from "../../components/ButtonSubmit";
-import Button from "../../components/Button";
-import ConfirmationModal from "../../components/ConfirmationModal";
+import ButtonSubmit from "./ButtonSubmit";
+import Button from "./Button";
+import ConfirmationModal from "./ConfirmationModal";
 import { API_BASE_URL } from "@/lib/api";
 
-const RegisterForm = () => {
-  const initialFormData = {
+/**
+ * Formulaire utilisateur réutilisable
+ * @param {string} mode - "create" ou "edit"
+ * @param {object} initialData - Données existantes si mode="edit"
+ * @param {function} onSuccess - Callback appelé après succès
+ * @param {function} onCancel - Callback appelé lors de l'annulation
+ */
+const UserForm = ({
+  mode = "create",
+  initialData = null,
+  onSuccess = () => {},
+  onCancel = () => {},
+}) => {
+  const isEditMode = mode === "edit";
+  const router = useRouter();
+
+  const emptyFormData = {
     firstname: "",
     lastname: "",
     username: "",
@@ -17,13 +32,56 @@ const RegisterForm = () => {
     url_userpicture: "",
   };
 
-  const [formData, setFormData] = useState(initialFormData);
-  const [isLoading, setIsLoading] = useState(false);
-  const [modalMessage, setModalMessage] = useState(""); // texte à afficher
-  const [modalType, setModalType] = useState("success"); // "success" ou "error"
-  const [showModal, setShowModal] = useState(false); // contrôle l'affichage
+  // Initialiser avec les données existantes en mode edit
+  const [formData, setFormData] = useState(() => {
+    if (isEditMode && initialData) {
+      return {
+        firstname: initialData.firstname || "",
+        lastname: initialData.lastname || "",
+        username: initialData.username || "",
+        email: initialData.email || "",
+        password: "", // Toujours vide au départ
+        country_user: initialData.country_user || "",
+        url_userpicture: initialData.url_userpicture || "",
+      };
+    }
+    return emptyFormData;
+  });
 
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+  const [modalType, setModalType] = useState("success");
+  const [showModal, setShowModal] = useState(false);
+
+  // Pré-remplir le formulaire en mode édition
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        firstname: initialData.firstname || "",
+        lastname: initialData.lastname || "",
+        username: initialData.username || "",
+        email: initialData.email || "",
+        password: "", // Toujours vide au départ
+        country_user: initialData.country_user || "",
+        url_userpicture: initialData.url_userpicture || "",
+      });
+    }
+  }, [initialData]);
+
+  // Mettre à jour le formulaire si initialData change
+  useEffect(() => {
+    if (isEditMode && initialData) {
+      setFormData({
+        firstname: initialData.firstname || "",
+        lastname: initialData.lastname || "",
+        username: initialData.username || "",
+        email: initialData.email || "",
+        password: "",
+        country_user: initialData.country_user || "",
+        url_userpicture: initialData.url_userpicture || "",
+      });
+    }
+  }, [initialData, isEditMode]);
 
   const handleChange = (e) => {
     setFormData({
@@ -37,32 +95,56 @@ const RegisterForm = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/users`, {
-        method: "POST",
+      // Adapter l'endpoint selon le mode
+      const endpoint = isEditMode
+        ? `${API_BASE_URL}/users/${initialData.id}`
+        : `${API_BASE_URL}/users`;
+
+      const method = isEditMode ? "PATCH" : "POST";
+
+      // En mode edit, ne pas envoyer password si vide
+      const dataToSend = { ...formData };
+      if (isEditMode && !formData.password) {
+        delete dataToSend.password;
+      }
+
+      const response = await fetch(endpoint, {
+        method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(dataToSend),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || "Erreur lors de l'inscription");
+        throw new Error(
+          data.error ||
+            `Erreur lors de ${isEditMode ? "la modification" : "l'inscription"}`
+        );
       }
 
-      // alert("Utilisateur créé avec succès 🎉");
+      // Message de succès adapté
+      const successMessage = isEditMode
+        ? "Utilisateur modifié avec succès 🎉"
+        : "Utilisateur créé avec succès 🎉";
 
-      // afficher la modale
       setModalType("success");
-      setModalMessage("Utilisateur créé avec succès 🎉");
+      setModalMessage(successMessage);
       setShowModal(true);
+
       setTimeout(() => {
         setShowModal(false);
-        router.push("/login"); // après inscription, redirige vers login
-      }, 3000);
+
+        // Comportement différent selon le mode
+        if (isEditMode) {
+          onSuccess(data);
+        } else {
+          router.push("/login"); // Redirection vers login après création
+        }
+      }, 2000);
     } catch (err) {
-      //setError(err.message);
       setModalType("error");
       setModalMessage(err.message);
       setShowModal(true);
@@ -72,7 +154,11 @@ const RegisterForm = () => {
   };
 
   const handleCancel = () => {
-    setFormData(initialFormData);
+    if (isEditMode) {
+      onCancel();
+    } else {
+      setFormData(emptyFormData); // Reset le formulaire
+    }
   };
 
   return (
@@ -81,6 +167,11 @@ const RegisterForm = () => {
         onSubmit={handleSubmit}
         className="max-w-md mx-4 md:mx-auto space-y-6 p-6 bg-white rounded-2xl shadow-md"
       >
+        {/* Titre adapté selon le mode */}
+        <h2 className="text-xl font-bold text-center text-gray-800 mb-6">
+          {isEditMode ? "✏️ Modifier l'utilisateur" : "🏄‍♂️ Créer un compte"}
+        </h2>
+
         <div>
           <label
             htmlFor="firstname"
@@ -92,7 +183,7 @@ const RegisterForm = () => {
             type="text"
             id="firstname"
             name="firstname"
-            value={formData.firstname || ""}
+            value={formData.firstname}
             onChange={handleChange}
             placeholder="First name"
             required
@@ -112,7 +203,7 @@ const RegisterForm = () => {
             type="text"
             id="lastname"
             name="lastname"
-            value={formData.lastname || ""}
+            value={formData.lastname}
             onChange={handleChange}
             placeholder="Last name"
             required
@@ -132,7 +223,7 @@ const RegisterForm = () => {
             type="text"
             id="username"
             name="username"
-            value={formData.username || ""}
+            value={formData.username}
             onChange={handleChange}
             placeholder="Username"
             required
@@ -152,7 +243,7 @@ const RegisterForm = () => {
             type="email"
             id="email"
             name="email"
-            value={formData.email || ""}
+            value={formData.email}
             onChange={handleChange}
             placeholder="example@email.com"
             required
@@ -161,24 +252,33 @@ const RegisterForm = () => {
           />
         </div>
 
+        {/* Password optionnel en mode edit */}
         <div>
           <label
             htmlFor="password"
             className="block text-sm font-medium text-gray-700 my-1"
           >
-            Password<span className="text-red-700"> *</span>
+            Password
+            <span className="text-red-700">{isEditMode ? "" : " *"}</span>
           </label>
           <input
             type="password"
             id="password"
             name="password"
-            value={formData.password || ""}
+            value={formData.password}
             onChange={handleChange}
-            placeholder="Password"
-            required
+            placeholder={
+              isEditMode ? "Laisser vide pour ne pas changer" : "Password"
+            }
+            required={!isEditMode}
             className="w-full border p-2 rounded"
             disabled={isLoading}
           />
+          {isEditMode && (
+            <p className="text-xs text-gray-500 mt-1">
+              Laissez vide pour conserver le mot de passe actuel
+            </p>
+          )}
         </div>
 
         <div>
@@ -192,7 +292,7 @@ const RegisterForm = () => {
             type="text"
             id="country_user"
             name="country_user"
-            value={formData.country_user || ""}
+            value={formData.country_user}
             onChange={handleChange}
             placeholder="Country"
             className="w-full border p-2 rounded"
@@ -211,21 +311,23 @@ const RegisterForm = () => {
             type="url"
             id="url_userpicture"
             name="url_userpicture"
-            value={formData.url_userpicture || ""}
+            value={formData.url_userpicture}
             onChange={handleChange}
             placeholder="https://exemple.com/photo.jpg"
             className="w-full border p-2 rounded"
             disabled={isLoading}
           />
         </div>
+
         <p>
           <span className="text-red-700"> *</span>
           <em> Required</em>
         </p>
 
+        {/* Texte du bouton adapté */}
         <div className="flex space-x-4">
           <ButtonSubmit className="flex-[3]" disabled={isLoading}>
-            🏄‍♂️ Send
+            {isEditMode ? "💾 Enregistrer" : "🏄‍♂️ Send"}
           </ButtonSubmit>
           <Button
             type="button"
@@ -233,7 +335,7 @@ const RegisterForm = () => {
             className="flex-1 bg-gray-400"
             disabled={isLoading}
           >
-            ❌ Cancel
+            ❌ {isEditMode ? "Annuler" : "Cancel"}
           </Button>
         </div>
       </form>
@@ -250,4 +352,4 @@ const RegisterForm = () => {
   );
 };
 
-export default RegisterForm;
+export default UserForm;
