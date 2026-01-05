@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import UserCard from "@/components/UserCard";
 import UserForm from "@/components/UserForm";
 import DemoBanner from "@/components/DemoBanner";
+import Button from "@/components/Button";
+import CreateUserModal from "@/components/CreateUserModal";
 
 export default function AdminDashboard() {
   const { user, username, loading } = useAuth();
@@ -16,8 +18,9 @@ export default function AdminDashboard() {
   const [error, setError] = useState(null);
   const [isReady, setIsReady] = useState(false);
   const formRef = useRef(null);
+  const [isCreateUserModalOpen, setIsCreateUserModalOpen] = useState(false);
 
-  // 👉 NEW : état pour l’édition
+  // état pour l’édition de l'utilisateur
   const [editingUser, setEditingUser] = useState(null);
 
   // rediriger vers la page "login" si pas connecté
@@ -53,14 +56,14 @@ export default function AdminDashboard() {
     loadUsers();
   }, []);
 
-  // NEW : effet pour scroller vers le formulaire quand editingUser change
+  // effet pour scroller vers le formulaire d'édition quand editingUser change
   useEffect(() => {
     if (editingUser && formRef.current) {
       formRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }, [editingUser]);
 
-  // ✅ Effet pour marquer le composant comme prêt après l'hydratation
+  // ✅ Effet pour marquer le composant comme prêt après l'hydratation Next.js
   useEffect(() => {
     setIsReady(true);
   }, []);
@@ -68,7 +71,7 @@ export default function AdminDashboard() {
   // 🔴 évite un rendu prématuré (corrige les erreurs d'hydratation Next.js)
   if (!isReady) return null;
 
-  // 👉 NEW : supprimer un user
+  // supprimer un user
   const handleDelete = async (userId) => {
     if (!confirm("Supprimer cet utilisateur ?")) return;
 
@@ -90,12 +93,12 @@ export default function AdminDashboard() {
     }
   };
 
-  // 👉 NEW : activer le mode édition
+  // activer le mode édition
   const handleEdit = (user) => {
     setEditingUser(user);
   };
 
-  // 👉 NEW : Callback après succès dans UserForm
+  // Callback après succès dans UserForm
   const handleFormSuccess = async (updatedUser) => {
     try {
       // Récupérer le user complet depuis l'API (avec role)
@@ -115,23 +118,9 @@ export default function AdminDashboard() {
       alert("Erreur lors de la mise à jour de l'utilisateur");
     } finally {
       setEditingUser(null); // fermer le formulaire
+      setIsCreateUserModalOpen(false); // fermer la modale si création
     }
   };
-  // 👉 OLD : Callback après succès dans UserForm
-  // const handleFormSuccess = (updatedUser) => {
-  //   setUsers((prev) =>
-  //     prev.map((u) => (u.id === updatedUser.id ? updatedUser : u))
-  //   );
-  //   setEditingUser(null); // fermer le formulaire
-  // };
-
-  // if (!isReady) return null;
-
-  // 👉 NEW : callback quand UserForm a fini une édition
-  // const handleFormSuccess = () => {
-  //   setEditingUser(null);
-  //   loadUsers();
-  // };
 
   return (
     <div className="p-8 text-center">
@@ -141,9 +130,9 @@ export default function AdminDashboard() {
         </h1>
         <DemoBanner />
       </div>
-
-      {/* USER INFO */}
       <div className="flex flex-col px-10">
+        {/* BLOC Hello User */}
+        {/* photo user + texte */}
         <div className="flex items-center gap-4 mb-6">
           <div className="flex items-center gap-6 p-4">
             {/* USER PICTURE */}
@@ -154,80 +143,114 @@ export default function AdminDashboard() {
                 alt="User Picture"
                 fill
                 sizes="100px"
-                // width={100}
-                // height={140}
                 priority
               />
             </div>
 
-            <div className="min-h-[3rem] flex items-center"></div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-semibold italic">
               Hello {user?.firstname ? `${user.firstname}!` : ""}
             </h2>
           </div>
         </div>
       </div>
+      {/* === LAYOUT EN 2 COLONNES === */}
+      {/* BLOC Boutons + affichage UserCards */}
+      <div className="flex flex-col md:flex-row gap-6 mb-10">
+        {/* ────────────── COLONNE GAUCHE ────────────── */}
+        <div className="w-full md:w-60 flex flex-col gap-4 mt-16 ml-8">
+          <div className="w-50 mb-8">
+            {/* Bouton pour ouvrir la modale de création */}
+            <Button onClick={() => setIsCreateUserModalOpen(true)}>
+              Create a new member
+            </Button>
+          </div>
+          <br />
 
-      {/* État de chargement / erreur */}
-      {usersLoading && <p>Chargement des utilisateurs...</p>}
-      {error && <p className="text-red-500">{error}</p>}
+          <div className="w-50">
+            <Button onClick={() => setIsCreateUserModalOpen(true)}>
+              Create a new spot
+            </Button>
+          </div>
+        </div>
 
-      {/* DISPLAY USERS : sections affichées uniquement si pas d'erreur et pas de chargement */}
-      {!usersLoading && !error && (
-        <div className="flex flex-col md:flex-col gap-12 items-center">
-          {/* Section Admins & Modérateurs */}
-          <section className="flex-1">
-            <h2 className="font-bold mb-4">Staff members</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {users
-                .filter((user) =>
-                  ["admin", "moderator"].includes(user.role?.role)
-                )
-                .map((user) => (
-                  <UserCard
-                    key={user.id}
-                    {...user}
-                    onEdit={() => setEditingUser(user)}
-                    onDelete={() => handleDelete(user.id)}
+        {/* ────────────── COLONNE DROITE (LARGE) ────────────── */}
+        <div className="flex-1">
+          {/* État de chargement / erreur */}
+          {usersLoading && <p>Chargement des utilisateurs...</p>}
+          {error && <p className="text-red-500">{error}</p>}
+
+          {/* DISPLAY USERS : sections affichées uniquement si pas d'erreur et pas de chargement */}
+          {!usersLoading && !error && (
+            <div className="flex flex-col md:flex-col gap-12 items-center">
+              {/* Section Admins & Modérateurs */}
+              <section className="flex-1">
+                <h2 className="font-bold mb-4">Staff members</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {users
+                    .filter((user) =>
+                      ["admin", "moderator"].includes(user.role?.role)
+                    )
+                    .map((user) => (
+                      <UserCard
+                        key={user.id}
+                        {...user}
+                        onEdit={() => setEditingUser(user)}
+                        onDelete={() => handleDelete(user.id)}
+                      />
+                    ))}
+                </div>
+              </section>
+
+              {/* Section Members */}
+              <section className="flex-1">
+                <h2 className="font-bold mb-4">Members</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {users
+                    .filter((user) => user.role?.role === "user")
+                    .map((user) => (
+                      <UserCard
+                        key={user.id}
+                        {...user}
+                        // nouveau pour page admin avec callbacks :
+                        onEdit={() => handleEdit(user)}
+                        onDelete={() => handleDelete(user.id)}
+                      />
+                    ))}
+                </div>
+              </section>
+
+              {/* FORMULAIRE (édition uniquement) */}
+              {editingUser && (
+                <div className="max-w-xl mx-auto my-10">
+                  <h2 className="text-xl font-semibold mb-4">
+                    Modifier {editingUser.firstname}
+                  </h2>
+                  <UserForm
+                    mode="edit"
+                    initialData={editingUser}
+                    onSuccess={handleFormSuccess}
+                    onCancel={() => setEditingUser(null)}
                   />
-                ))}
-            </div>
-          </section>
-
-          {/* Section Members */}
-          <section className="flex-1">
-            <h2 className="font-bold mb-4">Members</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {users
-                .filter((user) => user.role?.role === "user")
-                .map((user) => (
-                  <UserCard
-                    key={user.id}
-                    {...user}
-                    // nouveau pour page admin avec callbacks :
-                    onEdit={() => handleEdit(user)}
-                    onDelete={() => handleDelete(user.id)}
-                  />
-                ))}
-            </div>
-          </section>
-
-          {/* 👉 NEW : Zone formulaire (édition uniquement) */}
-          {editingUser && (
-            <div className="max-w-xl mx-auto my-10">
-              <h2 className="text-xl font-semibold mb-4">
-                Modifier {editingUser.firstname}
-              </h2>
-              <UserForm
-                mode="edit"
-                initialData={editingUser}
-                onSuccess={handleFormSuccess}
-                onCancel={() => setEditingUser(null)}
-              />
+                </div>
+              )}
             </div>
           )}
         </div>
+      </div>
+      {/* fin container deux colonnes */}
+
+      {/* ⭐️ Nouveau : MODALE CREATION */}
+      {isCreateUserModalOpen && (
+        <CreateUserModal onClose={() => setIsCreateUserModalOpen(false)}>
+          <UserForm
+            mode="create"
+            onSuccess={handleFormSuccess}
+            onCancel={() => setIsCreateUserModalOpen(false)}
+          />
+        </CreateUserModal>
       )}
-    </div>
+      <br />
+      <br />
+    </div> // fin du container principal
   );
 }

@@ -54,7 +54,6 @@ const UserCard = ({
               role,
             })
           }
-          // onClick={() => onEdit && onEdit(id)}
         />
         {/* Delete */}
         <img

@@ -44,42 +44,8 @@ const SpotCard = ({
     error: hashtagsError,
   } = useHashtags(id, isAuthenticated);
 
-  // ancienne version à supprimer
-  // const [comments, setComments] = useState([]);
-  // const [commentsLoading, setCommentsLoading] = useState(true);
-  // const [hashtags, setHashtags] = useState([]);
-  // const [hashtagsLoading, setHashtagsLoading] = useState(true);
-  // const [error, setError] = useState(null);
-
-  // const fetchComments = async () => {
-  //   try {
-  //     setCommentsLoading(true);
-  //     setError(null);
-
-  //     const res = await fetch(`http://localhost:3001/spots/${id}/comments`);
-  //     if (!res.ok) {
-  //       throw new Error(`Failed to fetch comments for spot ${id}`);
-  //     }
-
-  //     const data = await res.json();
-  //     setComments(data);
-  //   } catch (err) {
-  //     console.error("Error fetching comments:", err);
-  //     setError(err.message || "Failed to fetch comments");
-  //   } finally {
-  //     setCommentsLoading(false);
-  //   }
-  // };
-
-  // useEffect pour charger les commentaires
-  // useEffect(() => {
-  //   if (!isAuthenticated) return; // on ne charge pas si pas connecté
-
-  //   fetchComments();
-  // }, [isAuthenticated]);
-
   return (
-    <article className="flex flex-col h-full text-left bg-white shadow-md rounded-lg p-4 max-w-xl w-full mx-auto mb-6 border border-gray-200">
+    <article className="flex flex-col min-h-[400px] h-full text-left bg-white shadow-md rounded-lg p-4 max-w-xl w-full mx-auto mb-6 border border-gray-200">
       {/* Image */}
       <div className="relative w-full h-56 mb-4">
         <Image

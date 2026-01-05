@@ -30,6 +30,7 @@ const UserForm = ({
     password: "",
     country_user: "",
     url_userpicture: "",
+    role_id: 3, // Par défaut "user"
   };
 
   // Initialiser avec les données existantes en mode edit
@@ -43,6 +44,7 @@ const UserForm = ({
         password: "", // Toujours vide au départ
         country_user: initialData.country_user || "",
         url_userpicture: initialData.url_userpicture || "",
+        role_id: initialData.role_id || 3,
       };
     }
     return emptyFormData;
@@ -137,11 +139,20 @@ const UserForm = ({
       setTimeout(() => {
         setShowModal(false);
 
-        // Comportement différent selon le mode
-        if (isEditMode) {
+        // Comportement différent selon le mode (redirection vers login)
+        // if (isEditMode) {
+        //   onSuccess(data);
+        // } else {
+        //   router.push("/login");
+        // }
+
+        // ⭐️ nouveau comportement avec callback onSuccess
+        if (onSuccess && typeof onSuccess === "function") {
+          // Utilisé par la page admin
           onSuccess(data);
         } else {
-          router.push("/login"); // Redirection vers login après création
+          // Si utilisé par la page signup : on redirige vers login
+          router.push("/login");
         }
       }, 2000);
     } catch (err) {
@@ -317,6 +328,28 @@ const UserForm = ({
             className="w-full border p-2 rounded"
             disabled={isLoading}
           />
+        </div>
+
+        <div>
+          <label
+            htmlFor="role_id"
+            className="block text-sm font-medium text-gray-700 my-1"
+          >
+            Role<span className="text-red-700"> *</span>
+          </label>
+
+          <select
+            id="role_id"
+            name="role_id"
+            value={formData.role_id}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+            disabled={isLoading}
+          >
+            <option value={1}>Admin</option>
+            <option value={2}>Moderator</option>
+            <option value={3}>User</option>
+          </select>
         </div>
 
         <p>

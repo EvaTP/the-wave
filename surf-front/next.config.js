@@ -39,6 +39,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "hips.hearstapps.com",
       },
+      {
+        protocol: "https",
+        hostname: "upload.wikimedia.org",
+      },
     ],
   },
 };

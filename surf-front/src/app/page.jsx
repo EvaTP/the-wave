@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import SpotCard from "../components/SpotCard";
 // import SpotsMap from "../components/SpotsMap";
@@ -13,12 +13,19 @@ const SpotsMap = dynamic(() => import("@/components/SpotsMap"), {
   ssr: false,
 });
 
+const INITIAL_SPOTS_COUNT = 6; // on affiche deux lignes de trois spots en desktop au départ
+const SPOTS_PER_LOAD = 6;
+
 export default function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isReady, setIsReady] = useState(false); // savoir quand on peut rendre
   const [spots, setSpots] = useState([]);
+  const [displayedSpots, setDisplayedSpots] = useState(INITIAL_SPOTS_COUNT);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const observerRef = useRef(null);
+  const loadMoreRef = useRef(null);
 
   // vérifier l'état dans localStorage au chargement
   useEffect(() => {
@@ -43,6 +50,32 @@ export default function Home() {
     loadSpots();
   }, []);
 
+  // fonction de callback pour l'Intersection Observer pour le lazy loading
+  // vérifie qu'il reste des spots à afficher, puis ajoute 6 spots de plus. Math.min évite de dépasser la longueur du tableau (21 spots)
+  const loadMore = useCallback(() => {
+    if (displayedSpots < spots.length) {
+      setDisplayedSpots((prev) =>
+        Math.min(prev + SPOTS_PER_LOAD, spots.length)
+      );
+    }
+  }, [displayedSpots, spots.length]);
+
+  useEffect(() => {
+    if (loading || !loadMoreRef.current) return;
+
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMore();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observerRef.current.observe(loadMoreRef.current);
+
+    return () => observerRef.current?.disconnect();
+  }, [loading, loadMore]);
+
   // 🔴 évite un rendu prématuré (corrige les erreurs d'hydratation Next.js)
   if (!isReady) return null;
 
@@ -55,6 +88,9 @@ export default function Home() {
     localStorage.removeItem("isAuthenticated");
     setIsAuthenticated(false);
   };
+
+  const visibleSpots = spots.slice(0, displayedSpots);
+  const hasMoreSpots = displayedSpots < spots.length;
 
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-10 gap-16 sm:p-20">
@@ -90,14 +126,29 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Liste des spots */}
-        <div className="grid grid-cols-1 gap-6 mt-6sm:grid-cols-2 lg:grid-cols-3">
+        {/* Liste des spots avec skeleton loader */}
+        <div className="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 lg:grid-cols-3">
           {/* {loading && <p className="text-xl mt-5">Chargement des spots...</p>} */}
+          {loading &&
+            // Skeleton loaders pour éviter le CLS : réservent l'espace avant que les vraies cartes apparaissent
+            Array.from({ length: INITIAL_SPOTS_COUNT }).map((_, i) => (
+              <div
+                key={i}
+                className="h-[400px] bg-gray-200 animate-pulse rounded-lg"
+              />
+            ))}
+
           {error && <p className="text-red-500">{error}</p>}
+
           {!loading &&
             !error &&
-            spots.map((spot) => <SpotCard key={spot.id} {...spot} />)}
+            visibleSpots.map((spot) => <SpotCard key={spot.id} {...spot} />)}
         </div>
+
+        {/* Élément pour déclencher le chargement de plus de spots */}
+        {!loading && !error && hasMoreSpots && (
+          <div ref={loadMoreRef} className="h-10 w-full" />
+        )}
       </main>
     </div>
   );
