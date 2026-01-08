@@ -6,6 +6,7 @@ import SpotCard from "../components/SpotCard";
 // import SpotsMap from "../components/SpotsMap";
 import dynamic from "next/dynamic";
 import { fetchSpots } from "@/lib/fetchSpots";
+import { useRouter } from "next/navigation";
 import DemoBanner from "@/components/DemoBanner";
 import { lobster } from "./fonts";
 
@@ -27,6 +28,7 @@ export default function Home() {
 
   const observerRef = useRef(null);
   const loadMoreRef = useRef(null);
+  const router = useRouter();
 
   // vérifier l'état dans localStorage au chargement
   useEffect(() => {
@@ -88,6 +90,7 @@ export default function Home() {
   const handleLogout = () => {
     localStorage.removeItem("isAuthenticated");
     setIsAuthenticated(false);
+    router.push("/");
   };
 
   const visibleSpots = spots.slice(0, displayedSpots);
