@@ -1,19 +1,8 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { geistSans, geistMono } from "./fonts";
 import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import FootLinks from "../components/FootLinks";
 import { AuthProvider } from "../utils/useAuth";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 // metadata pour le SEO et PWA
 export const metadata = {
@@ -30,16 +19,31 @@ export const themeColor = "#1f406e";
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+      </head>
+
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* AuthProvider englobe toute l'appli pour l'accès aux infos utilisateur */}
-        <AuthProvider>
-          <Navbar />
-          {children}
-        </AuthProvider>
-        <FootLinks />
-        <Footer />
+        {/* Wrapper flex pour coller le footer en bas */}
+        <div className="min-h-screen flex flex-col">
+          {/* AuthProvider englobe toute l'appli pour l'accès aux infos utilisateur */}
+          <AuthProvider>
+            <Navbar />
+
+            {/* flex-1 pour que le contenu prenne tout l'espace */}
+            <main className="flex-1">{children}</main>
+          </AuthProvider>
+        </div>
+
+        {/* footer hors du flow pour éviter CLS */}
+        <Footer className="absolute bottom-0 left-0 right-0 w-full h-[260px]" />
       </body>
     </html>
   );

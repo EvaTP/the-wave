@@ -7,6 +7,7 @@ import SpotCard from "../components/SpotCard";
 import dynamic from "next/dynamic";
 import { fetchSpots } from "@/lib/fetchSpots";
 import DemoBanner from "@/components/DemoBanner";
+import { lobster } from "./fonts";
 
 // import différé client-only de SpotsMap
 const SpotsMap = dynamic(() => import("@/components/SpotsMap"), {
@@ -95,17 +96,20 @@ export default function Home() {
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-10 gap-16 sm:p-20">
       <main className="flex flex-col gap-6 row-start-2 items-center text-center">
-        <div className="flex flex-col -mt-18 mb-12 items-center">
+        <div className="flex flex-col items-center gap-6 mb-12">
           <Image
             className="dark:invert mt-[-8px]"
             src="/thewave.png"
             alt="The Wave logo"
             width={250}
             height={250}
-            style={{ height: "auto" }}
+            // style={{ height: "auto" }}
             priority
           />
-          <h1 className="font-lobster text-6xl md:text-8xl text-white drop-shadow-lg mt-4">
+          <h1
+            className={`${lobster.className} text-6xl md:text-8xl text-white drop-shadow-lg`}
+            style={{ minHeight: "6rem" }}
+          >
             🏄‍♂️ Worldwide Surf Spots
           </h1>
           <DemoBanner />

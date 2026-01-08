@@ -24,6 +24,10 @@ const SpotCard = ({
   facilities,
   spot_levels,
 }) => {
+  // Optimiser Unsplash pour baisser le CLS dans Lighthouse
+  const optimizedImageUrl = url_spotpicture?.includes("unsplash.com")
+    ? `${url_spotpicture}?w=600&h=400&fit=crop&q=80&fm=webp`
+    : url_spotpicture;
   const { toggleLike, isLiked } = useLikedSpots();
   const { isAuthenticated } = useAuth();
 
@@ -49,10 +53,13 @@ const SpotCard = ({
       {/* Image */}
       <div className="relative w-full h-56 mb-4">
         <Image
-          src={url_spotpicture}
+          // src={url_spotpicture}
+          src={optimizedImageUrl}
           alt={name}
           fill
           className="object-cover rounded-md"
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          loading="lazy"
         />
       </div>
 
