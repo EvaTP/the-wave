@@ -58,7 +58,7 @@ export default function Home() {
   const loadMore = useCallback(() => {
     if (displayedSpots < spots.length) {
       setDisplayedSpots((prev) =>
-        Math.min(prev + SPOTS_PER_LOAD, spots.length)
+        Math.min(prev + SPOTS_PER_LOAD, spots.length),
       );
     }
   }, [displayedSpots, spots.length]);
@@ -72,7 +72,7 @@ export default function Home() {
           loadMore();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
     observerRef.current.observe(loadMoreRef.current);
 
@@ -118,16 +118,20 @@ export default function Home() {
           <DemoBanner />
         </div>
 
-        <p className="font-lobster text-4xl  text-sky-800 text-center font-bold italic">
+        <h2 className="font-lobster text-4xl  text-sky-800 text-center font-bold italic">
           Welcome to the coolest surf spots location site in the world!
-        </p>
+        </h2>
         <div className="w-full h-[500px] mt-8">
-          <p className="text-center text-sky-700 text-3xl font-bold mb-1">
+          <h2 className="text-center text-sky-700 text-3xl font-bold mb-1">
             Surf Spots Map
-          </p>
+          </h2>
           <p className="text-sky-700 text-2xl text-center font-bold italic mb-4">
             Your next surf adventure is a click away...
           </p>
+          {/* <p className="text-center text-sky-700 text-3xl font-bold mb-1">
+            Surf Spots Map
+          </p> */}
+
           <div className="rounded-2xl shadow-2xl overflow-hidden">
             <SpotsMap />
           </div>

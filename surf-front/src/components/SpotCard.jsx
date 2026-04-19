@@ -170,13 +170,16 @@ const SpotCard = ({
                 <button
                   onClick={() => toggleLike(id)}
                   disabled={likesLoading}
-                  className="text-lg disabled:opacity-50 hover:scale-110 transition-transform"
+                  className="text-lg disabled:opacity-50 hover:scale-110 transition-transform p-2 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                  aria-label={
+                    isLiked(id) ? "Unlike this spot" : "Like this spot"
+                  }
                   title={
                     likesLoading
                       ? "Loading..."
                       : isLiked(id)
-                      ? "Unlike"
-                      : "Like"
+                        ? "Unlike"
+                        : "Like"
                   }
                 >
                   {likesLoading ? "⏳" : isLiked(id) ? "❤️" : "🤍"}

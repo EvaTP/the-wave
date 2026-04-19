@@ -12,7 +12,7 @@ export default function Footer() {
           <div className="flex justify-center md:justify-end gap-12 md:gap-20 text-black font-normal">
             <Link
               href="/"
-              className="flex flex-col items-center gap-2 hover:opacity-70 transition-opacity"
+              className="flex flex-col items-center gap-2 hover:opacity-70 transition-opacity p-3 min-w-[48px] min-h-[48px] justify-center"
             >
               <span>Map</span>
               {/* <Image
@@ -32,7 +32,7 @@ export default function Footer() {
             </Link>
             <Link
               href="/login"
-              className="flex flex-col items-center gap-2 hover:opacity-70 transition-opacity"
+              className="flex flex-col items-center gap-2 hover:opacity-70 transition-opacity p-3 min-w-[48px] min-h-[48px] justify-center"
             >
               <span>Login</span>
               {/* <Image
@@ -52,7 +52,7 @@ export default function Footer() {
             </Link>
             <Link
               href="/dashboard"
-              className="flex flex-col items-center gap-2 hover:opacity-70 transition-opacity"
+              className="flex flex-col items-center gap-2 hover:opacity-70 transition-opacity p-3 min-w-[48px] min-h-[48px] justify-center"
             >
               <span>My account</span>
               {/* <Image
@@ -102,7 +102,7 @@ export default function Footer() {
             {/* Lien About */}
             <Link
               href="/about"
-              className="hover:text-white transition-colors duration-200 text-base md:text-lg"
+              className="hover:text-white transition-colors duration-200 text-base md:text-lg p-3 min-w-[48px] min-h-[48px] justify-center"
             >
               About
             </Link>
