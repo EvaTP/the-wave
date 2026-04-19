@@ -60,7 +60,7 @@ export default function useLikedSpots() {
     try {
       if (!wasLiked) {
         // Créer le like (POST)
-        const response = await fetch("http://localhost:3001/likes", {
+        const response = await fetch(`${API_BASE_URL}/likes`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -80,10 +80,10 @@ export default function useLikedSpots() {
       } else {
         // Supprimer le like (DELETE) - adapter selon votre API
         const response = await fetch(
-          `http://localhost:3001/likes/${user.id}/${spotId}`,
+          `${API_BASE_URL}/likes/${user.id}/${spotId}`,
           {
             method: "DELETE",
-          }
+          },
         );
 
         if (response.ok) {
@@ -108,18 +108,3 @@ export default function useLikedSpots() {
     toggleLike,
   };
 }
-
-// const toggleLike = (id) => {
-//   let updated;
-//   if (likedSpots.includes(id)) {
-//     updated = likedSpots.filter((spotId) => spotId !== id);
-//   } else {
-//     updated = [...likedSpots, id];
-//   }
-//   setLikedSpots(updated);
-//   localStorage.setItem("likedSpots", JSON.stringify(updated));
-// };
-
-// const isLiked = (id) => Array.isArray(likedSpots) && likedSpots.includes(id);
-
-// return { likedSpots, toggleLike, isLiked };

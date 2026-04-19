@@ -57,9 +57,7 @@ export default function SpotsMap() {
     // Récupérer les spots depuis la base via l'API endpoint /spots/map
     const fetchSpots = async () => {
       try {
-        // console.log("🗺️ Fetching spots from:", `${API_BASE_URL}/spots/map`);
-        // const res = await fetch(`${API_BASE_URL}/spots/map`);
-        // const url = `http://localhost:3001/spots/map`;  ⭐  TEST : Forcer local
+        // console.log("⭐ Fetching spots from:", `${API_BASE_URL}/spots/map`);
         const url = `${API_BASE_URL}/spots/map`;
         console.log("😆 Fetching spots from /spots/map:", url);
 
@@ -81,7 +79,7 @@ export default function SpotsMap() {
             spot.lat !== null &&
             spot.lng !== null &&
             !isNaN(parseFloat(spot.lat)) &&
-            !isNaN(parseFloat(spot.lng))
+            !isNaN(parseFloat(spot.lng)),
         );
 
         console.log("📍", validSpots.length, "spots valides");
