@@ -3,24 +3,33 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import Image from "next/image";
 import SpotCard from "../components/SpotCard";
-// import SpotsMap from "../components/SpotsMap";
 import dynamic from "next/dynamic";
 import { fetchSpots } from "@/lib/fetchSpots";
 import { useRouter } from "next/navigation";
 import DemoBanner from "@/components/DemoBanner";
 import { lobster } from "./fonts";
 
-// import différé client-only de SpotsMap
+// Loader affiché à l'emplacement de la carte pendant que Leaflet se charge
+// (ensuite le loader de SpotsMap s'affichera pendant le fetch des spots)
+const MapSkeleton = () => (
+  <div className="w-full h-full bg-slate-200 animate-pulse rounded-2xl flex items-center justify-center">
+    <p className="text-sky-700 font-bold">🌊 Chargement de la carte...</p>
+  </div>
+);
+
+// Importation dynamique sans SSR uniquement pour le composant Carte
 const SpotsMap = dynamic(() => import("@/components/SpotsMap"), {
   ssr: false,
+  loading: () => <MapSkeleton />,
 });
 
-const INITIAL_SPOTS_COUNT = 6; // on affiche deux lignes de trois spots en desktop au départ
+// on affiche deux lignes de trois spots en desktop au départ
+const INITIAL_SPOTS_COUNT = 6;
 const SPOTS_PER_LOAD = 6;
 
 export default function Home() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isReady, setIsReady] = useState(false); // savoir quand on peut rendre
+  // const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // const [isReady, setIsReady] = useState(false); // savoir quand on peut rendre
   const [spots, setSpots] = useState([]);
   const [displayedSpots, setDisplayedSpots] = useState(INITIAL_SPOTS_COUNT);
   const [loading, setLoading] = useState(true);
@@ -30,14 +39,15 @@ export default function Home() {
   const loadMoreRef = useRef(null);
   const router = useRouter();
 
-  // vérifier l'état dans localStorage au chargement
-  useEffect(() => {
-    const auth = localStorage.getItem("isAuthenticated") === "true";
-    setIsAuthenticated(auth);
-    setIsReady(true); // on peut afficher maintenant
-  }, []);
+  // vérifier l'état de l'authentificationdans localStorage au chargement
+  // useEffect(() => {
+  //   const auth = localStorage.getItem("isAuthenticated") === "true";
+  //   setIsAuthenticated(auth);
+  //   setIsReady(true);
+  // }, []);
 
-  // récupérer les spots depuis le back-end
+  // récupérer la liste des spots depuis le back-end avec seul et unique appel vers l'API
+
   useEffect(() => {
     const loadSpots = async () => {
       try {
@@ -80,18 +90,16 @@ export default function Home() {
   }, [loading, loadMore]);
 
   // 🔴 évite un rendu prématuré (corrige les erreurs d'hydratation Next.js)
-  if (!isReady) return null;
-
-  const handleLogin = () => {
-    localStorage.setItem("isAuthenticated", "true");
-    setIsAuthenticated(true);
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("isAuthenticated");
-    setIsAuthenticated(false);
-    router.push("/");
-  };
+  // if (!isReady) return null;
+  // const handleLogin = () => {
+  //   localStorage.setItem("isAuthenticated", "true");
+  //   setIsAuthenticated(true);
+  // };
+  // const handleLogout = () => {
+  //   localStorage.removeItem("isAuthenticated");
+  //   setIsAuthenticated(false);
+  //   router.push("/");
+  // };
 
   const visibleSpots = spots.slice(0, displayedSpots);
   const hasMoreSpots = displayedSpots < spots.length;
@@ -106,7 +114,6 @@ export default function Home() {
             alt="The Wave logo"
             width={250}
             height={250}
-            // style={{ height: "auto" }}
             priority
           />
           <h1
@@ -128,18 +135,15 @@ export default function Home() {
           <p className="text-sky-700 text-2xl text-center font-bold italic mb-4">
             Your next surf adventure is a click away...
           </p>
-          {/* <p className="text-center text-sky-700 text-3xl font-bold mb-1">
-            Surf Spots Map
-          </p> */}
 
           <div className="rounded-2xl shadow-2xl overflow-hidden">
-            <SpotsMap />
+            {/* On transmet les données chargées une seule fois à SpotsMap via ses props */}
+            <SpotsMap spots={spots} loading={loading} />
           </div>
         </div>
 
-        {/* Liste des spots avec skeleton loader */}
+        {/* Liste des spots en grille avec skeleton loader */}
         <div className="grid grid-cols-1 gap-6 mt-6 sm:grid-cols-2 lg:grid-cols-3">
-          {/* {loading && <p className="text-xl mt-5">Chargement des spots...</p>} */}
           {loading &&
             // Skeleton loaders pour éviter le CLS : réservent l'espace avant que les vraies cartes apparaissent
             Array.from({ length: INITIAL_SPOTS_COUNT }).map((_, i) => (
