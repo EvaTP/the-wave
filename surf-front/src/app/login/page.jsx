@@ -1,5 +1,5 @@
 import LoginForm from "./LoginForm";
-import Image from "next/image";
+// import Image from "next/image";
 import Link from "next/link";
 import ButtonLink from "@/components/ButtonLink";
 

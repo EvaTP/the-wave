@@ -4,6 +4,7 @@ import { useState, useEffect, createContext, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { authService } from "../lib/authService";
 
+// Création du contexte React d'authentification
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
@@ -12,6 +13,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Vérification de la connexion au démarrage de l'application
   const initAuth = async () => {
     console.log("🔄 Initialisation de l'auth...");
     setLoading(true);
@@ -29,7 +31,7 @@ export function AuthProvider({ children }) {
     if (token && localUser && authService.isAuthenticated()) {
       console.log("✅ Utilisateur trouvé en local, vérification serveur...");
 
-      // Vérifier avec le serveur
+      // Vérifier avec le serveur backend si le token est toujours valide
       try {
         const serverUser = await authService.checkAuthStatus();
         if (serverUser) {
@@ -44,7 +46,8 @@ export function AuthProvider({ children }) {
         }
       } catch (error) {
         console.log("❌ Erreur vérification serveur:", error);
-        setUser(localUser); // Utiliser les données locales en cas d'erreur réseau
+        // Utiliser les données locales en cas d'erreur réseau
+        setUser(localUser);
         setIsAuthenticated(true);
       }
     } else {
@@ -61,11 +64,13 @@ export function AuthProvider({ children }) {
     initAuth();
   }, []);
 
+  // Fonction de connexion appelée par la page /login
   const handleLogin = async (username, password) => {
     try {
       // console.log("🔑 Tentative de connexion...");
       const data = await authService.login(username, password);
       console.log("✅ Connexion réussie:", data.user.username);
+      // Mise à jour immédiate de l'état global React (déclenche la mise à jour de la Navbar)
       setUser(data.user);
       setIsAuthenticated(true);
       return data;
@@ -74,7 +79,7 @@ export function AuthProvider({ children }) {
       throw error;
     }
   };
-
+  // Déconnexion : supprime le token et l'utilisateur du localStorage, met à jour l'état global React et redirige vers la page d'accueil
   const handleLogout = () => {
     console.log("👋 Déconnexion...");
     authService.logout();

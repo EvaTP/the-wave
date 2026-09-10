@@ -1,8 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ButtonSubmit from "../../components/ButtonSubmit";
-import { authService } from "../../lib/authService";
 import { useAuth } from "../../utils/useAuth";
 
 const LoginForm = () => {
@@ -12,7 +11,10 @@ const LoginForm = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Initialisation du routeur et du hook d'authentification
   const router = useRouter();
+  const { handleLogin } = useAuth();
 
   const handleChange = (e) => {
     setFormData({
@@ -27,15 +29,12 @@ const LoginForm = () => {
     setError("");
 
     try {
-      // ✅ Utiliser l'API au lieu des données en dur
-      const response = await authService.login(
-        formData.username,
-        formData.password
-      );
+      // 1. Authentification et mise à jour synchrone de l'état global React
+      await handleLogin(formData.username, formData.password);
 
-      console.log("✅ Connexion réussie:", response.user);
+      console.log("✅ Connexion réussie et état mis à jour");
 
-      // Rediriger vers la page d'accueil après connexion
+      // 2. Redirection explicite vers la page d'accueil
       router.push("/");
     } catch (err) {
       console.error("❌ Erreur connexion:", err);
@@ -95,11 +94,6 @@ const LoginForm = () => {
       <ButtonSubmit disabled={isLoading}>
         {isLoading ? "Connecting..." : "🏄‍♂️ Send"}
       </ButtonSubmit>
-
-      {/* Info de test temporaire */}
-      {/* <div className="mt-4 text-center text-xs text-gray-500">
-        <p>Test avec : bodhi / 1234xz</p>
-      </div> */}
     </form>
   );
 };
