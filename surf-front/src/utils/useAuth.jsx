@@ -79,7 +79,7 @@ export function AuthProvider({ children }) {
       throw error;
     }
   };
-  // Déconnexion : supprime le token et l'utilisateur du localStorage, met à jour l'état global React et redirige vers la page d'accueil
+  // Déconnexion : supprime le token et l'utilisateur du sessionStorage, met à jour l'état global React et redirige vers la page d'accueil
   const handleLogout = () => {
     console.log("👋 Déconnexion...");
     authService.logout();
