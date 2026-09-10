@@ -19,8 +19,8 @@ export const authService = {
       }
 
       // Stocker le token et les infos utilisateur
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      sessionStorage.setItem("token", data.token);
+      sessionStorage.setItem("user", JSON.stringify(data.user));
 
       return data;
     } catch (error) {
@@ -30,18 +30,18 @@ export const authService = {
 
   // Déconnexion
   logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
   },
 
   // Récupérer le token
   getToken() {
-    return localStorage.getItem("token");
+    return sessionStorage.getItem("token");
   },
 
   // Récupérer les infos utilisateur
   getUser() {
-    const user = localStorage.getItem("user");
+    const user = sessionStorage.getItem("user");
     return user ? JSON.parse(user) : null;
   },
 
@@ -79,7 +79,7 @@ export const authService = {
 
       const data = await response.json();
       // Mettre à jour les infos utilisateur
-      localStorage.setItem("user", JSON.stringify(data.user));
+      sessionStorage.setItem("user", JSON.stringify(data.user));
       return data.user;
     } catch (error) {
       console.error("Erreur vérification auth:", error);
