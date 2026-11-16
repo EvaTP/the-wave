@@ -123,7 +123,7 @@ const UserForm = ({
       if (!response.ok) {
         throw new Error(
           data.error ||
-            `Erreur lors de ${isEditMode ? "la modification" : "l'inscription"}`
+            `Erreur lors de ${isEditMode ? "la modification" : "l'inscription"}`,
         );
       }
 
@@ -180,7 +180,7 @@ const UserForm = ({
       >
         {/* Titre adapté selon le mode */}
         <h2 className="text-xl font-bold text-center text-gray-800 mb-6">
-          {isEditMode ? "✏️ Modifier l'utilisateur" : "🏄‍♂️ Créer un compte"}
+          {isEditMode ? "✏️ Modify Member" : "🏄‍♂️ Create an account"}
         </h2>
 
         <div>

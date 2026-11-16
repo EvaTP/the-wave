@@ -6,6 +6,7 @@ import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import UserCard from "@/components/UserCard";
 import UserForm from "@/components/UserForm";
+import SpotForm from "@/components/SpotForm";
 import DemoBanner from "@/components/DemoBanner";
 import Button from "@/components/Button";
 import CreateUserModal from "@/components/CreateUserModal";
@@ -19,6 +20,7 @@ export default function AdminDashboard() {
   const [isReady, setIsReady] = useState(false);
   const formRef = useRef(null);
   const [isCreateUserModalOpen, setIsCreateUserModalOpen] = useState(false);
+  const [isCreateSpotModalOpen, setIsCreateSpotModalOpen] = useState(false);
 
   // état pour l’édition de l'utilisateur
   const [editingUser, setEditingUser] = useState(null);
@@ -78,7 +80,7 @@ export default function AdminDashboard() {
     try {
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/users/${userId}`,
-        { method: "DELETE" }
+        { method: "DELETE" },
       );
 
       if (!res.ok) {
@@ -103,7 +105,7 @@ export default function AdminDashboard() {
     try {
       // Récupérer le user complet depuis l'API (avec role)
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/users/${updatedUser.id}`
+        `${process.env.NEXT_PUBLIC_API_URL}/users/${updatedUser.id}`,
       );
       if (!res.ok) throw new Error("Impossible de récupérer le user");
 
@@ -111,7 +113,7 @@ export default function AdminDashboard() {
 
       // Mettre à jour la liste locale
       setUsers((prev) =>
-        prev.map((u) => (u.id === fullUser.id ? fullUser : u))
+        prev.map((u) => (u.id === fullUser.id ? fullUser : u)),
       );
     } catch (err) {
       console.error(err);
@@ -153,6 +155,7 @@ export default function AdminDashboard() {
           </div>
         </div>
       </div>
+
       {/* === LAYOUT EN 2 COLONNES === */}
       {/* BLOC Boutons + affichage UserCards */}
       <div className="flex flex-col md:flex-row gap-6 mb-10">
@@ -167,7 +170,7 @@ export default function AdminDashboard() {
           <br />
 
           <div className="w-50">
-            <Button onClick={() => setIsCreateUserModalOpen(true)}>
+            <Button onClick={() => setIsCreateSpotModalOpen(true)}>
               Create a new spot
             </Button>
           </div>
@@ -188,7 +191,7 @@ export default function AdminDashboard() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {users
                     .filter((user) =>
-                      ["admin", "moderator"].includes(user.role?.role)
+                      ["admin", "moderator"].includes(user.role?.role),
                     )
                     .map((user) => (
                       <UserCard
@@ -239,13 +242,24 @@ export default function AdminDashboard() {
       </div>
       {/* fin container deux colonnes */}
 
-      {/* ⭐️ Nouveau : MODALE CREATION */}
+      {/* ⭐️ MODALE CREATION USER */}
       {isCreateUserModalOpen && (
         <CreateUserModal onClose={() => setIsCreateUserModalOpen(false)}>
           <UserForm
             mode="create"
             onSuccess={handleFormSuccess}
             onCancel={() => setIsCreateUserModalOpen(false)}
+          />
+        </CreateUserModal>
+      )}
+
+      {/* ⭐️ MODALE CREATION SPOT */}
+      {isCreateSpotModalOpen && (
+        <CreateUserModal onClose={() => setIsCreateSpotModalOpen(false)}>
+          <SpotForm
+            mode="create"
+            onSuccess={() => setIsCreateSpotModalOpen(false)}
+            onCancel={() => setIsCreateSpotModalOpen(false)}
           />
         </CreateUserModal>
       )}
