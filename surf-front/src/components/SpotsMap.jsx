@@ -180,6 +180,8 @@ function SurfboardLoader() {
 export default function SpotsMap({ spots = [], loading = false }) {
   const { isAuthenticated } = useAuth();
 
+  console.log("📍 Liste de tous les spots reçus par la carte :", spots);
+
   // On vérifie que les spots ont bien des coordonnées GPS valides (latitude et longitude)
   const validSpots = spots.filter(
     (spot) =>
@@ -188,19 +190,27 @@ export default function SpotsMap({ spots = [], loading = false }) {
       !isNaN(parseFloat(spot.lat)) &&
       !isNaN(parseFloat(spot.lng)),
   );
+  console.log(
+    "✅ Nombre de spots valides gardés pour affichage :",
+    validSpots.length,
+  );
 
   return (
     <div className="w-full h-[400px] rounded-lg shadow-lg overflow-hidden relative">
       <MapContainer
-        key={`map-${validSpots.length}`} // Re-crée la carte proprement quand les spots arrivent
+        // key={`map-${validSpots.length}`}  Re-crée la carte proprement quand les spots arrivent
         center={[20, 0]} // Centre la vue globale sur l'océan
         zoom={2}
+        worldCopyJump={true}
         className="w-full h-full"
       >
         {/* Fond de carte OpenStreetMap */}
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
+          // noWrap permet de répéter la carte en boucle et voir l'autre côté du monde
+          noWrap={false}
+          maxZoom={19}
         />
 
         {/* Création d'un marqueur pour chaque spot valide */}

@@ -11,17 +11,10 @@ export default function Footer() {
         <div className="max-w-[960px] mx-auto w-full px-4">
           <div className="flex justify-center md:justify-end gap-12 md:gap-20 text-black font-normal">
             <Link
-              href="/"
+              href="/#map-section"
               className="flex flex-col items-center gap-2 hover:opacity-70 transition-opacity p-3 min-w-[48px] min-h-[48px] justify-center"
             >
               <span>Map</span>
-              {/* <Image
-                src="/map.svg"
-                alt="map icon"
-                width={18}
-                height={18}
-                priority
-              /> */}
               <img
                 src="/map.svg"
                 alt="map icon"

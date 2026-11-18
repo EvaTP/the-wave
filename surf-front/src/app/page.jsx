@@ -109,7 +109,7 @@ export default function Home() {
       <main className="flex flex-col gap-6 row-start-2 items-center text-center">
         <div className="flex flex-col items-center gap-6 mb-12">
           <Image
-            className="dark:invert mt-[-8px]"
+            className="dark:invert mt-[-8px] h-auto"
             src="/thewave.png"
             alt="The Wave logo"
             width={250}
@@ -128,7 +128,7 @@ export default function Home() {
         <h2 className="font-lobster text-4xl  text-sky-800 text-center font-bold italic">
           Welcome to the coolest surf spots location site in the world!
         </h2>
-        <div className="w-full h-[500px] mt-8">
+        <div id="map-section" className="w-full h-[500px] mt-8">
           <h2 className="text-center text-sky-700 text-3xl font-bold mb-1">
             Surf Spots Map
           </h2>

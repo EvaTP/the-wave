@@ -18,7 +18,7 @@ export const themeColor = "#1f406e";
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -29,6 +29,7 @@ export default function RootLayout({ children }) {
       </head>
 
       <body
+        suppressHydrationWarning={true}
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {/* Wrapper flex pour coller le footer en bas */}

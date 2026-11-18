@@ -1,6 +1,10 @@
 // next.config.js
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Option pour indiquer clairement à Turbopack la racine du projet front
+  experimental: {
+    // Vide pour l'instant, mais prêt à recevoir des options si besoin
+  },
   images: {
     remotePatterns: [
       {
