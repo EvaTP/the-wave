@@ -17,7 +17,7 @@ API REST de l'application **The Wave**, qui gère les spots de surf, les utilisa
 
 ```
 the-wave/
-	├── surf-back/              # API Express.js
+	├── surf-back/                # API Express.js
 			├── prisma/         # Schéma, seeds et migrations
 			├── middleware/     # Token, roles, password
 			└── routes/         # Routes

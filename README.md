@@ -71,15 +71,15 @@ Ce projet est actuellement en développement. Les fonctionnalités principales i
 ```
 the-wave/
     ├── surf-back/          # API Express.js
-        │   ├── prisma/         # Schéma, seeds et migrations
-        │   ├── middleware/     # Token, roles, password
-        │   └── routes/         # Routes
+    │       ├── prisma/         # Schéma, seeds et migrations
+    │       ├── middleware/     # Token, roles, password
+    │       └── routes/         # Routes
     └── surf-front/         # Application Next.js
             ├── src/
             │   ├── app/        # Pages et routing Next.js
             │   └── components/ # Composants React
-                ├── lib/        # Configuration de l'API et fonctions de fetch
-                └── utils/      # Hooks personnalisés (useAuth, usePermissions)
+            │    ├── lib/        # Configuration de l'API et fonctions de fetch
+            │    └── utils/      # Hooks personnalisés (useAuth, usePermissions)
             └── public/         # Assets statiques
 ```
 
