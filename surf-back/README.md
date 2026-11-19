@@ -13,6 +13,16 @@ API REST de l'application **The Wave**, qui gère les spots de surf, les utilisa
 - **bcrypt** - hashage des mots de passe
 - **Render** - hébergement de l'API
 
+## 📦 Structure
+
+```
+the-wave/
+├── surf-back/          # API Express.js
+    ├── prisma/         # Schéma, seeds et migrations
+    ├── middleware/     # Token, roles, password
+    └── routes/         # Routes
+```
+
 ## 🛠️ Installation
 
 ### Prérequis
