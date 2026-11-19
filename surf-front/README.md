@@ -28,13 +28,14 @@ Application web **Next.js** de The Wave : carte interactive des spots de surf, a
 ## 📦 Structure
 
 ```
-surf-front/
-├── public/            # Assets statiques (icônes, images)
-└── src/
-    ├── app/           # Pages et routing (App Router)
-    ├── components/    # Composants réutilisables (UserForm, SpotsMap, DemoBanner...)
-    ├── lib/           # Configuration de l'API et fonctions de fetch
-    └── utils/         # Hooks personnalisés (useAuth, usePermissions)
+the-wave/
+	├── surf-front/
+        ├── public/            # Assets statiques (icônes, images)
+        └── src/
+            ├── app/           # Pages et routing (App Router)
+            ├── components/    # Composants réutilisables (UserForm, SpotsMap, DemoBanner...)
+            ├── lib/           # Configuration de l'API et fonctions de fetch
+            └── utils/         # Hooks personnalisés (useAuth, usePermissions)
 ```
 
 ## 🔐 Authentification et permissions
