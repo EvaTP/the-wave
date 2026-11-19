@@ -1,49 +1,99 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌊 The Wave - Front-end
 
-## Getting Started
+<p align="center">
+<img src="../the-wave.png" alt="visuel du site" width="400" height="280">
+</p>
 
-First, run the development server:
+Application web **Next.js** de The Wave : carte interactive des spots de surf, authentification et panel d'administration.
+
+← Retour à la [vue d'ensemble du projet](../README.md) · Voir aussi le [backend](../surf-back/README.md)
+
+## 🧰 Stack technique
+
+- **Next.js** (App Router) et **React**
+- **Tailwind CSS**
+- **React Leaflet** pour les cartes
+- Déploiement sur **Vercel**
+- **Carte interactive** : React Leaflet
+- **Authentification** : JWT côté client (`localStorage`)
+
+## ✨ Fonctionnalités
+
+- Carte interactive des spots (React Leaflet) avec loader de chargement
+- Inscription et connexion (JWT)
+- Panel d'administration : liste des membres, création, modification, suppression
+- Compte **demo** en lecture seule, avec bannière explicative
+- Design responsive
+
+## 📦 Structure
+
+```
+surf-front/
+├── public/            # Assets statiques (icônes, images)
+└── src/
+    ├── app/           # Pages et routing (App Router)
+    ├── components/    # Composants réutilisables (UserForm, SpotsMap, DemoBanner...)
+    ├── lib/           # Configuration de l'API et fonctions de fetch
+    └── utils/         # Hooks personnalisés (useAuth, usePermissions)
+```
+
+## 🔐 Authentification et permissions
+
+Le système d'authentification permet :
+
+- Inscription de nouveaux utilisateurs
+- Connexion sécurisée avec JWT
+- Vérification des mots de passe avec bcrypt
+- Gestion des rôles (admin, modérateur, utilisateur, demo)
+- Accès au panel admin pour les utilisateurs autorisés (admin et mode "demo")
+
+- Le token JWT et les informations utilisateur sont conservés dans le `localStorage`
+- Le hook **`useAuth`** expose l'utilisateur connecté et son état de connexion
+- Le hook **`usePermissions`** déduit les droits à partir du rôle (admin, moderator, user, demo)
+- Le composant **`DemoBanner`** s'affiche uniquement pour le compte demo
+- Le formulaire **`UserForm`** sert à la fois à la création (`mode="create"`) et à la modification (`mode="edit"`) d'un utilisateur
+
+## 🛠️ Installation
+
+### Prérequis
+
+- Node.js (v18 ou supérieur)
+- npm
+- L'API [surf-back](../surf-back/README.md) démarrée
+
+### Étapes
+
+```bash
+cd surf-front
+npm install
+cp .env.example .env.local
+```
+
+Variable d'environnement attendue dans `.env.local` :
+
+```env
+NEXT_PUBLIC_API_URL="http://localhost:3001"
+```
+
+Démarrez l'application :
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Ouvrir dans le navigateur pour afficher le résultat :
+Ouvrez [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Autres commandes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build   # build de production
+npm run start   # lance le build de production
+npm run lint    # vérifie le code avec ESLint (next lint)
+```
 
-## Learn More
+## 🎨 Crédits
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-- 💙 [BONUS]
-
-  ✅ - Push notifications
-  ✅ - Navigation hors connection
-
-# Ressources
-
-## Images : unsplash : https://unsplash.com/fr/images/stock/royalty-free
-
-## Icones : LUCIDE : https://lucide.dev/icons/
-
-## Wireframe & Logo : Canva
+- Images : [Unsplash](https://unsplash.com/fr/images/stock/royalty-free)
+- Icônes : [Lucide](https://lucide.dev/icons/)
+- Wireframes et logo : Canva

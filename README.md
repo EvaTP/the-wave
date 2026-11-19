@@ -10,6 +10,10 @@ Une plateforme communautaire connectant les surfeurs du monde entier autour de l
 
 The Wave est une application web permettant aux passionnés de surf de découvrir et partager des spots de surf à travers le monde. La plateforme offre un espace de communauté où les surfeurs peuvent se connecter, explorer de nouveaux spots, liker et partager leurs expériences via des commentaires.
 
+## 🔗 Démo
+
+- **Site en ligne** : https://the-wave-eight.vercel.app/
+
 ## ✨ Fonctionnalités
 
 - Carte interactive des spots de surf dans le monde
@@ -18,6 +22,13 @@ The Wave est une application web permettant aux passionnés de surf de découvri
 - Profil "demo" pour se connecter en lecture seule
 - Panel d'administration pour les utilisateurs admin : gestion des profils utilisateurs : création, modification, suppression (visible en mode "demo" en lecture seule)
 - Exploration des spots par localisation
+
+## 🛠️ Installation
+
+Les instructions détaillées se trouvent dans le README de chaque dossier :
+
+- 👉 [Backend (API, base de données, seeds)](./surf-back/README.md)
+- 👉 [Frontend (application Next.js)](./surf-front/README.md)
 
 ## 🚀 Technologies utilisées
 
@@ -40,60 +51,22 @@ The Wave est une application web permettant aux passionnés de surf de découvri
 - **JWT** - Gestion des tokens d'authentification
 - **bcrypt** - Hashage sécurisé des mots de passe
 
-## 🛠️ Installation
+## 🔒 Authentification
 
-### Prérequis
+Inscription et connexion sécurisées, avec gestion des rôles (admin, modérateur, utilisateur, demo).
+Le panel d'administration est accessible aux admins, et en lecture seule au compte demo.
 
-- Node.js (v18 ou supérieur)
-- npm ou yarn
-- PostgreSQL
+## 🚧 Statut du projet
 
-### Backend
+Ce projet est actuellement en développement. Les fonctionnalités principales implémentées incluent :
 
-```bash
-cd surf-back
-npm install
-```
+- ✅ Système d'authentification complet
+- ✅ Affichage des spots de surf sur carte interactive
+- ✅ Panel d'administration avec visualisation des membres
+- 🚧 Fonctionnalités communautaires en cours de développement
 
-Créez un fichier `.env` avec les variables suivantes :
-
-```env
-DATABASE_URL="votre_url_postgresql"
-JWT_SECRET="votre_secret_jwt"
-```
-
-Lancez les migrations Prisma :
-
-```bash
-npx prisma migrate dev
-```
-
-Démarrez le serveur :
-
-```bash
-npm run dev
-```
-
-### Frontend
-
-```bash
-cd surf-front
-npm install
-```
-
-Créez un fichier `.env.local` avec :
-
-```env
-NEXT_PUBLIC_API_URL="http://localhost:votre_port"
-```
-
-Démarrez l'application :
-
-```bash
-npm run dev
-```
-
-## 📦 Structure du projet
+<details>
+<summary>📦 Structure du projet</summary>
 
 ```
 the-wave/
@@ -107,28 +80,12 @@ the-wave/
     └── public/         # Assets statiques
 ```
 
-## 🔒 Authentification
-
-Le système d'authentification permet :
-
-- Inscription de nouveaux utilisateurs
-- Connexion sécurisée avec JWT
-- Vérification des mots de passe avec bcrypt
-- Accès au panel admin pour les utilisateurs autorisés (admin et mode "demo")
-
-## 🚧 Statut du projet
-
-Ce projet est actuellement en développement. Les fonctionnalités principales implémentées incluent :
-
-- ✅ Système d'authentification complet
-- ✅ Affichage des spots de surf sur carte interactive
-- ✅ Panel d'administration avec visualisation des membres
-- 🚧 Fonctionnalités communautaires en cours de développement
+</details>
 
 ## 👤 Auteur
 
 Eva Tharrats
 
-## 📄 Licence
+## 📄 Contexte du projet
 
 Ce projet a été développé dans le cadre de ma formation à Ada Tech School - Septembre 2025.
