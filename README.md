@@ -78,8 +78,8 @@ the-wave/
             ├── src/
             │   ├── app/         # Pages et routing Next.js
             │   └── components/  # Composants React
-            │    ├── lib/        # Configuration de l'API et fonctions de fetch
-            │    └── utils/      # Hooks personnalisés (useAuth, usePermissions)
+            │   ├── lib/         # Configuration de l'API et fonctions de fetch
+            │   └── utils/       # Hooks personnalisés (useAuth, usePermissions)
             └── public/          # Assets statiques
 ```
 
